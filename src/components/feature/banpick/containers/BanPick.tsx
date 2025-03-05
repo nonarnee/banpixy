@@ -3,37 +3,51 @@
 import BanPickHeader from '../components/BanPickHeader/BanPickHeader';
 import ChampionSelect from '../components/ChampionSelect/ChampionSelect';
 import TeamComposition from '../components/TeamComposition/TeamComposition';
+import useBanPick from '@/components/feature/banpick/hooks/useBanPick';
+
 import styles from './BanPick.module.scss';
 
 export default function BanPick() {
+  const {
+    phase,
+    currentTeam,
+    timer,
+    bluePicks,
+    redPicks,
+    blueBans,
+    redBans,
+    handleSelect,
+    disabled
+  } = useBanPick();
+
   return (
     <div className={styles.container}>
       <BanPickHeader
-        currentTeam="blue"
-        phase="BAN_1"
-        timer={10}
+        currentTeam={currentTeam}
+        phase={phase}
+        timer={timer}
       />
 
       <div className={styles.content}>
         <div className={styles.teamContainer}>
           <TeamComposition
             team="blue"
-            picks={[]}
-            bans={[]}
-            isActive={false}
+            picks={bluePicks}
+            bans={blueBans}
+            isActive={currentTeam === 'blue'}
           />
 
           <ChampionSelect
-            onSelect={() => { }}
-            disabled={[]}
-            currentTeam="blue"
+            onSelect={handleSelect}
+            disabled={disabled}
+            currentTeam={currentTeam}
           />
 
           <TeamComposition
             team="red"
-            picks={[]}
-            bans={[]}
-            isActive={false}
+            picks={redPicks}
+            bans={redBans}
+            isActive={currentTeam === 'red'}
           />
         </div>
       </div>

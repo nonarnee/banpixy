@@ -8,10 +8,14 @@ interface TeamCompositionProps {
   picks: Champion[];
   bans: Champion[];
   isActive: boolean;
-  banPosition: 'left' | 'right';
 }
 
-export default function TeamComposition({ team, picks, bans, isActive }: TeamCompositionProps) {
+export default function TeamComposition({
+  team,
+  picks,
+  bans,
+  isActive,
+}: TeamCompositionProps) {
   return (
     <div className={clsx(styles.container, {
       [styles.blue]: team === 'blue',
