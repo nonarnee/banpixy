@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #0A1428;
+  color: #fff;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 1rem;
+}
+
+.teamContainer {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
