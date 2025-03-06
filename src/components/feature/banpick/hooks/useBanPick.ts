@@ -1,163 +1,83 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Phase } from '@/types/Phase';
-import { Team } from '@/types/Team';
-import { Champion, BannedChampion } from '@/types/Champion';
-import { BANPICK_TIME } from '@/constants/time';
-import { CHAMPIONS } from '@/constants/champion';
-import { PHASE_ORDER, TEAM_ORDER } from '@/constants/order';
-
-interface BanPickState {
-  phase: Phase;
-  currentTeam: Team;
-  timer: number;
-  bluePicks: Champion[];
-  redPicks: Champion[];
-  blueBans: BannedChampion[];
-  redBans: BannedChampion[];
-  isEnd: boolean;
-}
+import { useEffect, useCallback } from 'react';
+import { Champion } from '@/types/Champion';
+import useBanPickStatus from './useBanPickStatus';
+import useTeamComposition from './useTeamComposition';
+import useBanPickFlow from './useBanPickFlow';
 
 export default function useBanPick() {
-  const [state, setState] = useState<BanPickState>({
-    phase: 'BAN_1',
-    currentTeam: 'blue',
-    timer: BANPICK_TIME,
-    bluePicks: [],
-    redPicks: [],
-    blueBans: [],
-    redBans: [],
-    isEnd: false,
-  });
-
-  // 선택된 챔피언들의 배열
-  const selectedChampions = useMemo(() => [
-    ...state.bluePicks,
-    ...state.redPicks,
-    ...state.blueBans,
-    ...state.redBans,
-  ], [state.bluePicks, state.redPicks, state.blueBans, state.redBans]);
-
-  // 선택 가능한 챔피언들의 배열
-  const availableChampions = useMemo(() =>
-    CHAMPIONS.filter(champion =>
-      !selectedChampions
-        .filter(selected => selected !== null)
-        .some(selected => selected?.name === champion.name)
-    )
-    , [selectedChampions]);
-
-  const nextPhase = useCallback(() => {
-    const currentIndex = PHASE_ORDER.indexOf(state.phase);
-    const nextPhase = PHASE_ORDER[currentIndex + 1];
-
-    if (currentIndex === PHASE_ORDER.length - 1) {
-      setState(prev => ({
-        ...prev,
-        isEnd: true,
-      }));
-    } else {
-      setState(prev => ({
-        ...prev,
-        phase: nextPhase,
-        currentTeam: TEAM_ORDER[nextPhase],
-        timer: BANPICK_TIME,
-      }));
-    }
-  }, [state.phase]);
+  const status = useBanPickStatus();
+  const flow = useBanPickFlow(status.isInProgress, status.complete);
+  const composition = useTeamComposition();
 
   // 랜덤 픽
   const selectRandomChampion = useCallback(() => {
-    if (availableChampions.length === 0) return;
+    if (composition.availableChampions.length === 0) return;
 
-    const randomIndex = Math.floor(Math.random() * availableChampions.length);
-    const randomChampion = availableChampions[randomIndex];
+    const randomIndex = Math.floor(Math.random() * composition.availableChampions.length);
+    const randomChampion = composition.availableChampions[randomIndex];
     handleSelect(randomChampion);
-  }, [availableChampions]);
+  }, [composition.availableChampions]);
 
   const handleSelect = useCallback((champion: Champion) => {
-    setState(prev => {
-      const isPickPhase = prev.phase.startsWith('PICK');
-      const team = prev.currentTeam;
-
-      if (isPickPhase) {
-        const picks = team === 'blue'
-          ? [...prev.bluePicks, champion]
-          : [...prev.redPicks, champion];
-
-        return {
-          ...prev,
-          bluePicks: team === 'blue' ? picks : prev.bluePicks,
-          redPicks: team === 'red' ? picks : prev.redPicks,
-        };
-      } else {
-        const bans = team === 'blue'
-          ? [...prev.blueBans, champion]
-          : [...prev.redBans, champion];
-
-        return {
-          ...prev,
-          blueBans: team === 'blue' ? bans : prev.blueBans,
-          redBans: team === 'red' ? bans : prev.redBans,
-        };
+    if (flow.isPickPhase) {
+      if (flow.isBluePhase) {
+        composition.setBluePicks([...composition.bluePicks, champion]);
       }
-    });
-    nextPhase();
-  }, [nextPhase]);
+
+      if (flow.isRedPhase) {
+        composition.setRedPicks([...composition.redPicks, champion]);
+      }
+    }
+
+    if (flow.isBanPhase) {
+      if (flow.isBluePhase) {
+        composition.setBlueBans([...composition.blueBans, champion]);
+      }
+
+      if (flow.isRedPhase) {
+        composition.setRedBans([...composition.redBans, champion]);
+      }
+    }
+
+    flow.goNextPhase();
+  }, [flow, composition]);
 
   const handleSkipBan = useCallback(() => {
-    if (!state.phase.startsWith('BAN')) return;
+    if (!flow.isBanPhase) return;
 
-    setState(prev => ({
-      ...prev,
-      blueBans: prev.currentTeam === 'blue'
-        ? [...prev.blueBans, null]
-        : prev.blueBans,
-      redBans: prev.currentTeam === 'red'
-        ? [...prev.redBans, null]
-        : prev.redBans,
-    }));
-    nextPhase();
-  }, [state.phase, nextPhase]);
+    if (flow.isBluePhase) {
+      composition.setBlueBans([...composition.blueBans, null]);
+    }
 
-  useEffect(() => {
-    // 남은 시간 감소
-    if (state.isEnd) return;
-    const timer = setInterval(() => {
-      setState(prev => {
-        return {
-          ...prev,
-          timer: prev.timer - 1
-        };
-      });
-    }, 1000);
+    if (flow.isRedPhase) {
+      composition.setRedBans([...composition.redBans, null]);
+    }
 
-    return () => clearInterval(timer);
-  }, [selectRandomChampion]);
+    flow.goNextPhase();
+  }, [flow, composition]);
 
   useEffect(() => {
     // 시간 초과시
-    if (state.isEnd) return;
+    if (!status.isInProgress) return;
 
-    if (state.timer < 0) {
-      if (state.phase.startsWith('BAN')) {
+    if (flow.time < 0) {
+      if (flow.isBanPhase) {
         // 밴 페이즈에서는 스킵
         handleSkipBan();
-      } else {
+      }
+
+      if (flow.isPickPhase) {
         // 픽 페이즈에서는 랜덤 픽
         selectRandomChampion();
       }
     }
-  }, [state.timer]);
+  }, [flow]);
 
   return {
-    ...state,
+    status,
+    flow,
+    composition,
     handleSelect,
     handleSkipBan,
-    disabled: [
-      ...state.bluePicks,
-      ...state.redPicks,
-      ...state.blueBans,
-      ...state.redBans,
-    ].filter(champion => champion !== null),
   };
 } 

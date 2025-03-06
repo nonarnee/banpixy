@@ -7,18 +7,18 @@ import { BANPICK_TIME } from '@/constants/time';
 
 interface BanPickHeaderProps {
   phase: Phase;
+  time: number;
   currentTeam: Team;
-  timer: number;
   isEnd: boolean;
 }
 
 export default function BanPickHeader({
-  currentTeam,
   phase,
-  timer,
+  time,
+  currentTeam,
   isEnd,
 }: BanPickHeaderProps) {
-  const progress = (timer / BANPICK_TIME) * 100;
+  const progress = (time / BANPICK_TIME) * 100;
 
   if (isEnd) {
     return (
@@ -48,9 +48,9 @@ export default function BanPickHeader({
 
       <div className={styles.timer}>
         <div className={clsx(styles.timerValue, {
-          [styles.warning]: timer <= 10
+          [styles.warning]: time <= 10
         })}>
-          {Math.max(timer, 0)}
+          {Math.max(time, 0)}
         </div>
         <div className={styles.timerLabel}>
           TIMER
@@ -61,7 +61,7 @@ export default function BanPickHeader({
         className={clsx(styles.progressBar, {
           [styles.blue]: currentTeam === 'blue',
           [styles.red]: currentTeam === 'red',
-          [styles.warning]: timer <= 10
+          [styles.warning]: time <= 10
         })}
       >
         <div

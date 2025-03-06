@@ -9,18 +9,18 @@ import { CHAMPIONS } from '@/constants/champion';
 import ChampionItem from '@/components/feature/banpick/components/ChampionItem/ChampionItem';
 
 interface ChampionSelectProps {
-  onSelect: (champion: Champion) => void;
-  disabled: Champion[];
+  disabledChampions: Champion[];
   currentTeam: Team;
   isBanPhase: boolean;
+  onSelect: (champion: Champion) => void;
   onSkipBan: () => void;
 }
 
 export default function ChampionSelect({
-  onSelect,
-  disabled,
+  disabledChampions,
   currentTeam,
   isBanPhase,
+  onSelect,
   onSkipBan,
 }: ChampionSelectProps) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +61,7 @@ export default function ChampionSelect({
           <ChampionItem
             key={champion.name}
             champion={champion}
-            isDisabled={disabled.some(c => c.name === champion.name)}
+            isDisabled={disabledChampions.some(c => c.name === champion.name)}
             onClick={onSelect}
           />
         ))}

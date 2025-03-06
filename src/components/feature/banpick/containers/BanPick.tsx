@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import BanPickHeader from '../components/BanPickHeader/BanPickHeader';
 import ChampionSelect from '../components/ChampionSelect/ChampionSelect';
 import TeamComposition from '../components/TeamComposition/TeamComposition';
@@ -10,62 +11,52 @@ import styles from './BanPick.module.scss';
 
 export default function BanPick() {
   const {
-    phase,
-    currentTeam,
-    timer,
-    bluePicks,
-    redPicks,
-    blueBans,
-    redBans,
+    status,
+    flow,
+    composition,
     handleSelect,
     handleSkipBan,
-    disabled,
-    isEnd,
   } = useBanPick();
 
-  console.log('//--------------------------------');
-  console.log('phase', phase);
-  console.log('currentTeam', currentTeam);
-  console.log('timer', timer);
-  console.log('bluePicks', bluePicks);
-  console.log('redPicks', redPicks);
-  console.log('blueBans', blueBans);
-  console.log('redBans', redBans);
-  console.log('--------------------------------//');
+  useEffect(() => {
+    if (status.isReady) {
+      status.start();
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
       <BanPickHeader
-        currentTeam={currentTeam}
-        phase={phase}
-        timer={timer}
-        isEnd={isEnd}
+        currentTeam={flow.currentTeam}
+        phase={flow.currentPhase}
+        time={flow.time}
+        isEnd={status.isCompleted}
       />
 
       <div className={styles.content}>
         <div className={styles.teamContainer}>
           <TeamComposition
             team="blue"
-            picks={bluePicks}
-            bans={blueBans}
-            isActive={!isEnd && currentTeam === 'blue'}
-            activeSlot={getActiveSlot(phase)}
+            picks={composition.bluePicks}
+            bans={composition.blueBans}
+            isActive={status.isInProgress && flow.isBluePhase}
+            activeSlot={getActiveSlot(flow.currentPhase)}
           />
 
           <ChampionSelect
-            disabled={disabled}
-            currentTeam={currentTeam}
-            isBanPhase={phase.startsWith('BAN')}
+            disabledChampions={composition.disabledChampions}
+            currentTeam={flow.currentTeam}
+            isBanPhase={flow.isBanPhase}
             onSelect={handleSelect}
             onSkipBan={handleSkipBan}
           />
 
           <TeamComposition
             team="red"
-            picks={redPicks}
-            bans={redBans}
-            isActive={!isEnd && currentTeam === 'red'}
-            activeSlot={getActiveSlot(phase)}
+            picks={composition.redPicks}
+            bans={composition.redBans}
+            isActive={status.isInProgress && flow.isRedPhase}
+            activeSlot={getActiveSlot(flow.currentPhase)}
           />
         </div>
       </div>

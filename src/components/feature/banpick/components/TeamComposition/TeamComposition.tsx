@@ -21,7 +21,6 @@ export default function TeamComposition({
   activeSlot,
 }: TeamCompositionProps) {
   const [[banpick, slot]] = Object.entries(activeSlot);
-  console.log(banpick, slot);
 
   return (
     <div className={clsx(styles.container, {
