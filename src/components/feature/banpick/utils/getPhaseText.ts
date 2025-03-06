@@ -3,45 +3,45 @@ import { Phase } from '@/types/Phase';
 export default function getPhaseText(phase: Phase) {
   switch (phase) {
     case 'BAN_1':
-      return 'BLUE 1밴';
+      return '1밴';
     case 'BAN_2':
-      return 'RED 1밴';
+      return '1밴';
     case 'BAN_3':
-      return 'BLUE 2밴';
+      return '2밴';
     case 'BAN_4':
-      return 'RED 2밴';
+      return '2밴';
     case 'BAN_5':
-      return 'BLUE 3밴';
+      return '3밴';
     case 'BAN_6':
-      return 'RED 3밴';
+      return '3밴';
     case 'BAN_7':
-      return 'RED 4밴';
+      return '4밴';
     case 'BAN_8':
-      return 'BLUE 4밴';
+      return '4밴';
     case 'BAN_9':
-      return 'RED 5밴';
+      return '5밴';
     case 'BAN_10':
-      return 'BLUE 5밴';
+      return '5밴';
     case 'PICK_1':
-      return 'BLUE 1픽';
+      return '1픽';
     case 'PICK_2':
-      return 'RED 1픽';
+      return '1픽';
     case 'PICK_3':
-      return 'RED 2픽';
+      return '2픽';
     case 'PICK_4':
-      return 'BLUE 2픽';
+      return '2픽';
     case 'PICK_5':
-      return 'BLUE 3픽';
+      return '3픽';
     case 'PICK_6':
-      return 'RED 3픽';
+      return '3픽';
     case 'PICK_7':
-      return 'RED 4픽';
+      return '4픽';
     case 'PICK_8':
-      return 'BLUE 4픽';
+      return '4픽';
     case 'PICK_9':
-      return 'BLUE 5픽';
+      return '5픽';
     case 'PICK_10':
-      return 'RED 5픽';
+      return '5픽';
     default:
       return 'Loading...';
   }

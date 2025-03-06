@@ -1,11 +1,8 @@
-import styles from './BanPickHeader.module.scss';
-import clsx from 'clsx';
 import { Team } from '@/types/Team';
 import { Phase } from '@/types/Phase';
-import PhaseInfo from './PhaseInfo/PhaseInfo';
-import ControlButtons from './ControlButtons/ControlButtons';
-import Timer from './Timer/Timer';
-import ProgressBar from './ProgressBar/ProgressBar';
+import ReadyStateHeader from './states/ReadyStateHeader';
+import InProgressHeader from './states/InProgressHeader';
+import EndStateHeader from './states/EndStateHeader';
 
 interface BanPickHeaderProps {
   phase: Phase;
@@ -51,52 +48,22 @@ export default function BanPickHeader({
   };
 
   if (isEnd) {
-    return (
-      <header className={styles.header}>
-        <div className={styles.end}>
-          밴픽 종료!
-        </div>
-        <div className={styles.rightContent}>
-          <button
-            className={clsx(styles.controlButton, styles.reset)}
-            onClick={handleClickResetButton}
-          >
-            초기화
-          </button>
-        </div>
-      </header>
-    );
+    return <EndStateHeader onReset={handleClickResetButton} />;
   }
 
   if (isReady) {
-    return (
-      <header className={styles.header}>
-        <button onClick={onStart} className={styles.startButton}>
-          시작하기
-        </button>
-      </header>
-    );
+    return <ReadyStateHeader onStart={onStart} />;
   }
 
   return (
-    <header className={styles.header}>
-      <PhaseInfo currentTeam={currentTeam} phase={phase} />
-
-      <div className={styles.rightContent}>
-        <ControlButtons
-          isPaused={isPaused}
-          isInProgress={isInProgress}
-          onReset={handleClickResetButton}
-          onTogglePlay={handleTogglePlay}
-        />
-
-        <Timer time={time} />
-      </div>
-
-      <ProgressBar
-        currentTeam={currentTeam}
-        time={time}
-      />
-    </header>
+    <InProgressHeader
+      currentTeam={currentTeam}
+      phase={phase}
+      isPaused={isPaused}
+      isInProgress={isInProgress}
+      time={time}
+      onReset={handleClickResetButton}
+      onTogglePlay={handleTogglePlay}
+    />
   );
 }
