@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import BanPickHeader from '../components/BanPickHeader/BanPickHeader';
 import ChampionSelect from '../components/ChampionSelect/ChampionSelect';
 import TeamComposition from '../components/TeamComposition/TeamComposition';
@@ -17,6 +16,7 @@ export default function BanPick() {
     handleSelect,
     handleSkipBan,
     handleReset,
+    updateTimerConfig,
   } = useBanPick();
 
   return (
@@ -29,9 +29,11 @@ export default function BanPick() {
         isInProgress={status.isInProgress}
         isReady={status.isReady}
         isPaused={status.isPaused}
+        timerConfig={status.timerConfig}
         onStart={status.start}
         onPause={status.pause}
         onReset={handleReset}
+        onUpdateTimerConfig={updateTimerConfig}
       />
 
       <div className={styles.content}>

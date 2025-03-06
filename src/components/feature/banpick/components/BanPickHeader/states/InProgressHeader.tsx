@@ -5,6 +5,7 @@ import Timer from '../Timer/Timer';
 import styles from '../BanPickHeader.module.scss';
 import { Team } from '@/types/Team';
 import { Phase } from '@/types/Phase';
+import { TimerConfig } from '../../../hooks/useBanPickStatus';
 
 interface InProgressHeaderProps {
   currentTeam: Team;
@@ -12,6 +13,7 @@ interface InProgressHeaderProps {
   isPaused: boolean;
   isInProgress: boolean;
   time: number;
+  timerConfig: TimerConfig;
   onReset: () => void;
   onTogglePlay: () => void;
 }
@@ -22,6 +24,7 @@ export default function InProgressHeader({
   isPaused,
   isInProgress,
   time,
+  timerConfig,
   onReset,
   onTogglePlay,
 }: InProgressHeaderProps) {
@@ -37,12 +40,13 @@ export default function InProgressHeader({
           onTogglePlay={onTogglePlay}
         />
 
-        <Timer time={time} />
+        {timerConfig.enabled && <Timer time={time} />}
       </div>
 
       <ProgressBar
         currentTeam={currentTeam}
         time={time}
+        timerConfig={timerConfig}
       />
     </header>
   );

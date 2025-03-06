@@ -6,7 +6,7 @@ import useBanPickFlow from './useBanPickFlow';
 
 export default function useBanPick() {
   const status = useBanPickStatus();
-  const flow = useBanPickFlow(status.isInProgress, status.complete);
+  const flow = useBanPickFlow(status.isInProgress, status.complete, status.timerConfig);
   const composition = useTeamComposition();
 
   const handleReset = useCallback(() => {
@@ -86,5 +86,6 @@ export default function useBanPick() {
     handleSelect,
     handleSkipBan,
     handleReset,
+    updateTimerConfig: status.updateTimerConfig,
   };
 } 

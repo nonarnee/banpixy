@@ -3,6 +3,7 @@ import { Phase } from '@/types/Phase';
 import ReadyStateHeader from './states/ReadyStateHeader';
 import InProgressHeader from './states/InProgressHeader';
 import EndStateHeader from './states/EndStateHeader';
+import { TimerConfig } from '../../hooks/useBanPickStatus';
 
 interface BanPickHeaderProps {
   phase: Phase;
@@ -12,9 +13,11 @@ interface BanPickHeaderProps {
   isInProgress: boolean;
   isReady: boolean;
   isPaused: boolean;
+  timerConfig: TimerConfig;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
+  onUpdateTimerConfig: (config: Partial<TimerConfig>) => void;
 }
 
 export default function BanPickHeader({
@@ -25,10 +28,13 @@ export default function BanPickHeader({
   isInProgress,
   isReady,
   isPaused,
+  timerConfig,
   onStart,
   onPause,
   onReset,
+  onUpdateTimerConfig,
 }: BanPickHeaderProps) {
+  console.log(timerConfig);
   const handleClickResetButton = () => {
     onPause();
 
@@ -48,11 +54,21 @@ export default function BanPickHeader({
   };
 
   if (isEnd) {
-    return <EndStateHeader onReset={handleClickResetButton} />;
+    return (
+      <EndStateHeader
+        onReset={handleClickResetButton}
+      />
+    );
   }
 
   if (isReady) {
-    return <ReadyStateHeader onStart={onStart} />;
+    return (
+      <ReadyStateHeader
+        onStart={onStart}
+        timerConfig={timerConfig}
+        onUpdateTimerConfig={onUpdateTimerConfig}
+      />
+    );
   }
 
   return (
@@ -61,6 +77,7 @@ export default function BanPickHeader({
       phase={phase}
       isPaused={isPaused}
       isInProgress={isInProgress}
+      timerConfig={timerConfig}
       time={time}
       onReset={handleClickResetButton}
       onTogglePlay={handleTogglePlay}

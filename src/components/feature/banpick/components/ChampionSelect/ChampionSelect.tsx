@@ -64,7 +64,7 @@ export default function ChampionSelect({
             onClick={handleSkipBan}
             className={styles.skipButton}
           >
-            스킵
+            노밴
           </button>
         )}
       </div>

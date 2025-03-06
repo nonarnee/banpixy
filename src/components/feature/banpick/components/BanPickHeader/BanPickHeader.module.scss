@@ -39,3 +39,70 @@
   align-items: center;
   gap: 1.5rem;
 }
+
+.readyContent {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.timerConfig {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 3rem;
+  padding: 0 1rem;
+  background-color: rgba(200, 170, 110, 0.1);
+  border: 1px solid rgba(200, 170, 110, 0.3);
+  border-radius: 4px;
+}
+
+.timerToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+
+  input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+  }
+
+  span {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #C8AA6E;
+  }
+}
+
+.timerDuration {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  input[type="number"] {
+    width: 4rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #C8AA6E;
+    background-color: rgba(200, 170, 110, 0.1);
+    border: 1px solid rgba(200, 170, 110, 0.3);
+    border-radius: 4px;
+    text-align: center;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+  }
+
+  span {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #C8AA6E;
+  }
+}

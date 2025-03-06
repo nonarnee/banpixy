@@ -1,3 +1,4 @@
+import { BANPICK_TIME } from '@/constants/time';
 import { useState, useCallback } from 'react';
 
 export enum BanPickStatus {
@@ -7,8 +8,21 @@ export enum BanPickStatus {
   COMPLETED = 'COMPLETED'
 }
 
+export interface TimerConfig {
+  enabled: boolean;
+  duration: number;
+}
+
 export default function useBanPickStatus() {
   const [currentStatus, setCurrentStatus] = useState<BanPickStatus>(BanPickStatus.READY);
+  const [timerConfig, setTimerConfig] = useState<TimerConfig>({
+    enabled: false,
+    duration: BANPICK_TIME,
+  });
+
+  const updateTimerConfig = useCallback((config: Partial<TimerConfig>) => {
+    setTimerConfig((prev) => ({ ...prev, ...config }));
+  }, []);
 
   const transition = useCallback((from: BanPickStatus[], to: BanPickStatus) => {
     if (!from.includes(currentStatus)) return;
@@ -17,6 +31,8 @@ export default function useBanPickStatus() {
 
   return {
     currentStatus,
+    timerConfig,
+    updateTimerConfig,
     isReady: currentStatus === BanPickStatus.READY,
     isInProgress: currentStatus === BanPickStatus.IN_PROGRESS,
     isPaused: currentStatus === BanPickStatus.PAUSED,
@@ -24,6 +40,6 @@ export default function useBanPickStatus() {
     start: () => transition([BanPickStatus.READY, BanPickStatus.PAUSED], BanPickStatus.IN_PROGRESS),
     pause: () => transition([BanPickStatus.IN_PROGRESS], BanPickStatus.PAUSED),
     complete: () => transition([BanPickStatus.IN_PROGRESS], BanPickStatus.COMPLETED),
-    reset: () => transition([BanPickStatus.READY, BanPickStatus.PAUSED, BanPickStatus.COMPLETED], BanPickStatus.READY),
+    reset: () => transition([BanPickStatus.IN_PROGRESS, BanPickStatus.PAUSED, BanPickStatus.COMPLETED], BanPickStatus.READY),
   };
 }

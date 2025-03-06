@@ -1,18 +1,33 @@
 import clsx from 'clsx';
 import styles from './ProgressBar.module.scss';
 import { Team } from '@/types/Team';
-import { BANPICK_TIME } from '@/constants/time';
+import { TimerConfig } from '../../../hooks/useBanPickStatus';
+import { useEffect, useState } from 'react';
 
 interface ProgressBarProps {
   currentTeam: Team;
   time: number;
+  timerConfig: TimerConfig;
 }
 
 export default function ProgressBar({
   currentTeam,
   time,
+  timerConfig,
 }: ProgressBarProps) {
-  const progress = (time / BANPICK_TIME) * 100;
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const progress = timerConfig.enabled
+    ? (time / timerConfig.duration) * 100
+    : 100;
+
+  useEffect(() => {
+    if (time === timerConfig.duration) {
+      setShouldAnimate(false);
+      requestAnimationFrame(() => {
+        setShouldAnimate(true);
+      });
+    }
+  }, [time, timerConfig.duration]);
 
   return (
     <div
