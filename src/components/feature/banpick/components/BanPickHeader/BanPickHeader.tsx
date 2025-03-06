@@ -10,10 +10,21 @@ interface BanPickHeaderProps {
   currentTeam: Team;
   timer: number;
   maxTime?: number;
+  isEnd: boolean;
 }
 
-export default function BanPickHeader({ currentTeam, phase, timer, maxTime = BANPICK_TIME }: BanPickHeaderProps) {
+export default function BanPickHeader({ currentTeam, phase, timer, maxTime = BANPICK_TIME, isEnd }: BanPickHeaderProps) {
   const progress = (timer / maxTime) * 100;
+
+  if (isEnd) {
+    return (
+      <header className={styles.header}>
+        <div className={styles.end}>
+          END
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className={styles.header}>

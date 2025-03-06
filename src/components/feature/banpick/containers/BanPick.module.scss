@@ -3,6 +3,7 @@
   flex-direction: column;
   background-color: #0A1428;
   color: #fff;
+  height: 100vh;
 }
 
 .content {
@@ -11,10 +12,12 @@
   justify-content: center;
   align-items: stretch;
   padding: 1rem;
+  height: 0;
 }
 
 .teamContainer {
   display: flex;
   gap: 1rem;
   flex: 1;
+  height: 100%;
 }

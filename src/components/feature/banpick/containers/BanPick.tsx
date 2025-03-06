@@ -3,7 +3,8 @@
 import BanPickHeader from '../components/BanPickHeader/BanPickHeader';
 import ChampionSelect from '../components/ChampionSelect/ChampionSelect';
 import TeamComposition from '../components/TeamComposition/TeamComposition';
-import useBanPick from '@/components/feature/banpick/hooks/useBanPick';
+import useBanPick from '../hooks/useBanPick';
+import getActiveSlot from '../utils/getActiveSlot';
 
 import styles from './BanPick.module.scss';
 
@@ -17,7 +18,8 @@ export default function BanPick() {
     blueBans,
     redBans,
     handleSelect,
-    disabled
+    disabled,
+    isEnd,
   } = useBanPick();
 
   console.log('//--------------------------------');
@@ -36,6 +38,7 @@ export default function BanPick() {
         currentTeam={currentTeam}
         phase={phase}
         timer={timer}
+        isEnd={isEnd}
       />
 
       <div className={styles.content}>
@@ -45,6 +48,7 @@ export default function BanPick() {
             picks={bluePicks}
             bans={blueBans}
             isActive={currentTeam === 'blue'}
+            activeSlot={getActiveSlot(phase)}
           />
 
           <ChampionSelect
@@ -58,6 +62,7 @@ export default function BanPick() {
             picks={redPicks}
             bans={redBans}
             isActive={currentTeam === 'red'}
+            activeSlot={getActiveSlot(phase)}
           />
         </div>
       </div>

@@ -12,12 +12,14 @@ interface ChampionSelectProps {
   onSelect: (champion: Champion) => void;
   disabled: Champion[];
   currentTeam: Team;
+  isEnd: boolean;
 }
 
 export default function ChampionSelect({
   onSelect,
   disabled,
   currentTeam,
+  isEnd,
 }: ChampionSelectProps) {
   const [searchQuery, setSearchQuery] = useState('');
 

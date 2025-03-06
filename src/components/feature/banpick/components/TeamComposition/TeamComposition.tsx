@@ -1,6 +1,7 @@
 import styles from './TeamComposition.module.scss';
 import { Champion } from '@/types/Champion';
 import { Team } from '@/types/Team';
+import { ActiveSlot } from '@/components/feature/banpick/utils/getActiveSlot';
 import clsx from 'clsx';
 
 interface TeamCompositionProps {
@@ -8,6 +9,7 @@ interface TeamCompositionProps {
   picks: Champion[];
   bans: Champion[];
   isActive: boolean;
+  activeSlot: ActiveSlot;
 }
 
 export default function TeamComposition({
@@ -15,7 +17,10 @@ export default function TeamComposition({
   picks,
   bans,
   isActive,
+  activeSlot,
 }: TeamCompositionProps) {
+  const [[banpick, slot]] = Object.entries(activeSlot);
+
   return (
     <div className={clsx(styles.container, {
       [styles.blue]: team === 'blue',
@@ -27,7 +32,9 @@ export default function TeamComposition({
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className={styles.banSlot}
+              className={clsx(styles.banSlot, {
+                [styles.current]: banpick === 'BAN' && slot === i + 1,
+              })}
             >
               {bans[i] && (
                 <div className={styles.bannedChampion}>
@@ -50,7 +57,7 @@ export default function TeamComposition({
             className={clsx(styles.pickSlot, {
               [styles.empty]: !picks[i],
               [styles.selected]: picks[i],
-              [styles.current]: isActive && i === picks.length,
+              [styles.current]: banpick === 'pick' && slot === i + 1,
             })}
           >
             {picks[i] && (
@@ -69,7 +76,9 @@ export default function TeamComposition({
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className={styles.banSlot}
+              className={clsx(styles.banSlot, {
+                [styles.current]: banpick === 'BAN' && slot === i + 1,
+              })}
             >
               {bans[i] && (
                 <div className={styles.bannedChampion}>

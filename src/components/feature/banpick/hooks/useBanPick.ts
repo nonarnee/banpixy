@@ -4,6 +4,7 @@ import { Team } from '@/types/Team';
 import { Champion } from '@/types/Champion';
 import { BANPICK_TIME } from '@/constants/time';
 import { CHAMPIONS } from '@/constants/champion';
+import { PHASE_ORDER, TEAM_ORDER } from '@/constants/order';
 
 interface BanPickState {
   phase: Phase;
@@ -13,23 +14,8 @@ interface BanPickState {
   redPicks: Champion[];
   blueBans: Champion[];
   redBans: Champion[];
+  isEnd: boolean;
 }
-
-const PHASE_ORDER: Phase[] = [
-  'BAN_1', 'BAN_2', 'BAN_3', 'BAN_4', 'BAN_5', 'BAN_6',
-  'PICK_1', 'PICK_2', 'PICK_3', 'PICK_4',
-  'BAN_7', 'BAN_8', 'BAN_9', 'BAN_10',
-  'PICK_5', 'PICK_6', 'PICK_7'
-];
-
-const TEAM_ORDER: Record<Phase, Team> = {
-  'BAN_1': 'blue', 'BAN_2': 'red', 'BAN_3': 'blue',
-  'BAN_4': 'red', 'BAN_5': 'blue', 'BAN_6': 'red',
-  'PICK_1': 'blue', 'PICK_2': 'red', 'PICK_3': 'blue',
-  'PICK_4': 'red', 'BAN_7': 'red', 'BAN_8': 'blue',
-  'BAN_9': 'red', 'BAN_10': 'blue', 'PICK_5': 'red',
-  'PICK_6': 'blue', 'PICK_7': 'red'
-};
 
 export default function useBanPick() {
   const [state, setState] = useState<BanPickState>({
@@ -40,6 +26,7 @@ export default function useBanPick() {
     redPicks: [],
     blueBans: [],
     redBans: [],
+    isEnd: false,
   });
 
   // 선택된 챔피언들의 배열
@@ -66,6 +53,11 @@ export default function useBanPick() {
         phase: nextPhase,
         currentTeam: TEAM_ORDER[nextPhase],
         timer: BANPICK_TIME,
+      }));
+    } else {
+      setState(prev => ({
+        ...prev,
+        isEnd: true,
       }));
     }
   }, [state.phase]);
@@ -111,6 +103,7 @@ export default function useBanPick() {
 
   useEffect(() => {
     // 남은 시간 감소
+    if (state.isEnd) return;
     const timer = setInterval(() => {
       setState(prev => {
         return {
@@ -125,7 +118,9 @@ export default function useBanPick() {
 
   useEffect(() => {
     // 시간 초과시 랜덤 픽
-    if (state.timer <= 1) {
+    if (state.isEnd) return;
+
+    if (state.timer <= 0) {
       selectRandomChampion();
     }
   }, [state.timer]);
