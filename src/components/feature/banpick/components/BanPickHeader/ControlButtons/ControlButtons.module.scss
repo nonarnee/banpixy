@@ -1,0 +1,42 @@
+@import '@/styles/colors.scss';
+
+.controlButtonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  @include button-colors($red);
+
+  &:hover {
+    background-color: rgba(200, 170, 110, 0.2);
+  }
+
+  &.pause {
+    @include button-colors($green);
+  }
+
+  &.inProgress {
+    @include button-colors($red);
+  }
+
+  &.reset {
+    @include button-colors($light-blue);
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

@@ -1,24 +1,29 @@
 import { useState, useCallback } from 'react';
 
-export type BanPickStatus = 'READY' | 'IN_PROGRESS' | 'PAUSED' | 'COMPLETED';
+export enum BanPickStatus {
+  READY = 'READY',
+  IN_PROGRESS = 'IN_PROGRESS',
+  PAUSED = 'PAUSED',
+  COMPLETED = 'COMPLETED'
+}
 
 export default function useBanPickStatus() {
-  const [currentStatus, setCurrentStatus] = useState<BanPickStatus>('READY');
+  const [currentStatus, setCurrentStatus] = useState<BanPickStatus>(BanPickStatus.READY);
 
-  const start = useCallback(() => setCurrentStatus('IN_PROGRESS'), []);
-  const pause = useCallback(() => setCurrentStatus('PAUSED'), []);
-  const complete = useCallback(() => setCurrentStatus('COMPLETED'), []);
-  const reset = useCallback(() => setCurrentStatus('READY'), []);
+  const transition = useCallback((from: BanPickStatus[], to: BanPickStatus) => {
+    if (!from.includes(currentStatus)) return;
+    setCurrentStatus(to);
+  }, [currentStatus]);
 
   return {
     currentStatus,
-    isReady: currentStatus === 'READY',
-    isInProgress: currentStatus === 'IN_PROGRESS',
-    isPaused: currentStatus === 'PAUSED',
-    isCompleted: currentStatus === 'COMPLETED',
-    start,
-    pause,
-    complete,
-    reset,
+    isReady: currentStatus === BanPickStatus.READY,
+    isInProgress: currentStatus === BanPickStatus.IN_PROGRESS,
+    isPaused: currentStatus === BanPickStatus.PAUSED,
+    isCompleted: currentStatus === BanPickStatus.COMPLETED,
+    start: () => transition([BanPickStatus.READY, BanPickStatus.PAUSED], BanPickStatus.IN_PROGRESS),
+    pause: () => transition([BanPickStatus.IN_PROGRESS], BanPickStatus.PAUSED),
+    complete: () => transition([BanPickStatus.IN_PROGRESS], BanPickStatus.COMPLETED),
+    reset: () => transition([BanPickStatus.READY, BanPickStatus.PAUSED, BanPickStatus.COMPLETED], BanPickStatus.READY),
   };
 }

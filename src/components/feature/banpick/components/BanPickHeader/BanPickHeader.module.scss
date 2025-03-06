@@ -1,3 +1,5 @@
+@import '@/styles/colors.scss';
+
 .header {
   display: flex;
   justify-content: center;
@@ -10,41 +12,6 @@
   border-bottom: 1px solid rgba(200, 170, 110, 0.3);
 }
 
-.phaseInfo {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.teamIndicator {
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-
-  &.blue {
-    background-color: rgba(10, 109, 174, 0.2);
-    color: #0A6DAE;
-    border: 1px solid #0A6DAE;
-  }
-
-  &.red {
-    background-color: rgba(174, 39, 51, 0.2);
-    color: #AE2733;
-    border: 1px solid #AE2733;
-  }
-}
-
-.phase {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #C8AA6E;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .end {
   font-size: 1.5rem;
   font-weight: 600;
@@ -54,13 +21,11 @@
 .startButton {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #AE2733;
-  background-color: rgba(200, 170, 110, 0.1);
-  border: 1px solid #AE2733;
   border-radius: 4px;
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  @include button-colors($light-blue);
 
   &:hover {
     background-color: rgba(200, 170, 110, 0.2);
@@ -73,127 +38,4 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-}
-
-.controlButtonGroup {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.controlButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background-color: rgba(200, 170, 110, 0.1);
-  border: 1px solid #AE2733;
-  border-radius: 4px;
-  color: #AE2733;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: rgba(200, 170, 110, 0.2);
-  }
-
-  &.pause {
-    border-color: #388E3C;
-    color: #388E3C;
-  }
-
-  &.inProgress {
-    border-color: #AE2733;
-    color: #AE2733;
-  }
-
-  &.reset {
-    border-color: #ADD8E6;
-    color: #ADD8E6;
-  }
-}
-
-.icon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-.timer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.timerValue {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-
-  @keyframes pulse {
-    0% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.5;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-
-  &.warning {
-    color: #FF4655;
-    animation: pulse 1s infinite;
-  }
-}
-
-.timerLabel {
-  font-size: 0.875rem;
-  color: #8A8A8A;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.progressBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-
-  .progress {
-    height: 100%;
-    transition: width 1s linear;
-
-    &.blue {
-      background-color: #0A6DAE;
-    }
-
-    &.red {
-      background-color: #AE2733;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 1;
-  }
 }

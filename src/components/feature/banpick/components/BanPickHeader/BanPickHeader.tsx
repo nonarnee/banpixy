@@ -1,10 +1,11 @@
 import styles from './BanPickHeader.module.scss';
 import clsx from 'clsx';
-import getPhaseText from '@/components/feature/banpick/utils/getPhaseText';
 import { Team } from '@/types/Team';
 import { Phase } from '@/types/Phase';
-import { BANPICK_TIME } from '@/constants/time';
-import { PauseIcon, PlayIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import PhaseInfo from './PhaseInfo/PhaseInfo';
+import ControlButtons from './ControlButtons/ControlButtons';
+import Timer from './Timer/Timer';
+import ProgressBar from './ProgressBar/ProgressBar';
 
 interface BanPickHeaderProps {
   phase: Phase;
@@ -31,8 +32,6 @@ export default function BanPickHeader({
   onPause,
   onReset,
 }: BanPickHeaderProps) {
-  const progress = (time / BANPICK_TIME) * 100;
-
   const handleClickResetButton = () => {
     onPause();
 
@@ -41,7 +40,7 @@ export default function BanPickHeader({
     }
   };
 
-  const handleClickControlButton = () => {
+  const handleTogglePlay = () => {
     if (isInProgress) {
       onPause();
     }
@@ -81,68 +80,23 @@ export default function BanPickHeader({
 
   return (
     <header className={styles.header}>
-      <div className={styles.phaseInfo}>
-        <div
-          className={clsx(styles.teamIndicator, {
-            [styles.blue]: currentTeam === 'blue',
-            [styles.red]: currentTeam === 'red'
-          })}
-        >
-          {currentTeam.toUpperCase()} TEAM
-        </div>
-        <div className={styles.phase}>
-          {getPhaseText(phase)}
-        </div>
-      </div>
+      <PhaseInfo currentTeam={currentTeam} phase={phase} />
 
       <div className={styles.rightContent}>
-        <div className={styles.controlButtonGroup}>
-          <button
-            onClick={handleClickResetButton}
-            className={clsx(styles.controlButton, styles.reset)}
-          >
-            <ArrowPathIcon className={styles.icon} />
-          </button>
-          <button
-            onClick={handleClickControlButton}
-            className={clsx(styles.controlButton, {
-              [styles.pause]: isPaused,
-              [styles.inProgress]: isInProgress,
-            })}
-          >
-            {isPaused
-              ? <PlayIcon className={styles.icon} />
-              : <PauseIcon className={styles.icon} />}
-          </button>
-        </div>
-
-        <div className={styles.timer}>
-          <div className={clsx(styles.timerValue, {
-            [styles.warning]: time <= 10
-          })}>
-            {Math.max(time, 0)}
-          </div>
-          <div className={styles.timerLabel}>
-            TIMER
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={clsx(styles.progressBar, {
-          [styles.blue]: currentTeam === 'blue',
-          [styles.red]: currentTeam === 'red',
-          [styles.warning]: time <= 10
-        })}
-      >
-        <div
-          className={clsx(styles.progress, {
-            [styles.blue]: currentTeam === 'blue',
-            [styles.red]: currentTeam === 'red',
-          })}
-          style={{ width: `${progress}%` }}
+        <ControlButtons
+          isPaused={isPaused}
+          isInProgress={isInProgress}
+          onReset={handleClickResetButton}
+          onTogglePlay={handleTogglePlay}
         />
+
+        <Timer time={time} />
       </div>
+
+      <ProgressBar
+        currentTeam={currentTeam}
+        time={time}
+      />
     </header>
   );
 }

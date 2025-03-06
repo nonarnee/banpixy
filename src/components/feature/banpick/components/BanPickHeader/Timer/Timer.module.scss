@@ -1,0 +1,39 @@
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.timerValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+
+  &.warning {
+    color: #FF4655;
+    animation: pulse 1s infinite;
+  }
+}
+
+.timerLabel {
+  font-size: 0.875rem;
+  color: #8A8A8A;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
