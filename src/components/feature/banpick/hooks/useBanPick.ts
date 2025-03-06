@@ -95,7 +95,10 @@ export default function useBanPick() {
           redPicks: team === 'red' ? picks : prev.redPicks,
         };
       } else {
-        const bans = team === 'blue' ? [...prev.blueBans, champion] : [...prev.redBans, champion];
+        const bans = team === 'blue'
+          ? [...prev.blueBans, champion]
+          : [...prev.redBans, champion];
+
         return {
           ...prev,
           blueBans: team === 'blue' ? bans : prev.blueBans,
@@ -107,19 +110,25 @@ export default function useBanPick() {
   }, [nextPhase]);
 
   useEffect(() => {
+    // 남은 시간 감소
     const timer = setInterval(() => {
       setState(prev => {
-        if (prev.timer <= 1) {
-          // 시간 초과시 랜덤 픽
-          setTimeout(() => selectRandomChampion(), 0);
-          return prev;
-        }
-        return { ...prev, timer: prev.timer - 1 };
+        return {
+          ...prev,
+          timer: prev.timer - 1
+        };
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [selectRandomChampion]);
+
+  useEffect(() => {
+    // 시간 초과시 랜덤 픽
+    if (state.timer <= 1) {
+      selectRandomChampion();
+    }
+  }, [state.timer]);
 
   return {
     ...state,

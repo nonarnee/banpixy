@@ -20,6 +20,16 @@ export default function BanPick() {
     disabled
   } = useBanPick();
 
+  console.log('//--------------------------------');
+  console.log('phase', phase);
+  console.log('currentTeam', currentTeam);
+  console.log('timer', timer);
+  console.log('bluePicks', bluePicks);
+  console.log('redPicks', redPicks);
+  console.log('blueBans', blueBans);
+  console.log('redBans', redBans);
+  console.log('--------------------------------//');
+
   return (
     <div className={styles.container}>
       <BanPickHeader
