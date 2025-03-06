@@ -1,17 +1,24 @@
 import styles from './TeamComposition.module.scss';
-import { Champion } from '@/types/Champion';
 import { Team } from '@/types/Team';
+import getActiveSlot from '@/feature/banpick/utils/getActiveSlot';
 import clsx from 'clsx';
+import { useBanPickContext } from '../../contexts/BanPickContext';
 
 interface TeamCompositionProps {
   team: Team;
-  picks: Champion[];
-  bans: Champion[];
-  isActive: boolean;
-  banPosition: 'left' | 'right';
 }
 
-export default function TeamComposition({ team, picks, bans, isActive }: TeamCompositionProps) {
+export default function TeamComposition({ team }: TeamCompositionProps) {
+  const { status, composition, flow } = useBanPickContext();
+
+  const isActive = status.isInProgress && flow.currentTeam === team;
+  const picks = team === 'blue'
+    ? composition.bluePicks
+    : composition.redPicks;
+
+  const activeSlot = getActiveSlot(flow.currentPhase);
+  const [[banpick, slot]] = Object.entries(activeSlot);
+
   return (
     <div className={clsx(styles.container, {
       [styles.blue]: team === 'blue',
@@ -23,16 +30,23 @@ export default function TeamComposition({ team, picks, bans, isActive }: TeamCom
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className={styles.banSlot}
+              className={clsx(styles.banSlot, {
+                [styles.current]: banpick === 'BAN' && slot === i + 1,
+              })}
             >
-              {bans[i] && (
+              {composition.redBans[i] && (
+                // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={bans[i].imageUrl}
-                    alt={bans[i].name}
+                    src={composition.redBans[i].imageUrl}
+                    alt={composition.redBans[i].name}
                   />
                   <div className={styles.banOverlay} />
                 </div>
+              )}
+              {composition.redBans[i] === null && (
+                // 밴 스킵
+                <div className={styles.banOverlay} />
               )}
             </div>
           ))}
@@ -46,7 +60,7 @@ export default function TeamComposition({ team, picks, bans, isActive }: TeamCom
             className={clsx(styles.pickSlot, {
               [styles.empty]: !picks[i],
               [styles.selected]: picks[i],
-              [styles.current]: isActive && i === picks.length,
+              [styles.current]: banpick === 'PICK' && slot === i + 1,
             })}
           >
             {picks[i] && (
@@ -65,16 +79,23 @@ export default function TeamComposition({ team, picks, bans, isActive }: TeamCom
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className={styles.banSlot}
+              className={clsx(styles.banSlot, {
+                [styles.current]: banpick === 'BAN' && slot === i + 1,
+              })}
             >
-              {bans[i] && (
+              {composition.blueBans[i] && (
+                // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={bans[i].imageUrl}
-                    alt={bans[i].name}
+                    src={composition.blueBans[i].imageUrl}
+                    alt={composition.blueBans[i].name}
                   />
                   <div className={styles.banOverlay} />
                 </div>
+              )}
+              {composition.blueBans[i] === null && (
+                // 밴 스킵
+                <div className={styles.banOverlay} />
               )}
             </div>
           ))}

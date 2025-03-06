@@ -22,11 +22,12 @@ export default function ChampionItem({
       disabled={isDisabled}
     >
       <div className={styles.imageWrapper}>
-        <img
+        {/* TODO: 이미지 추가 후 주석 해제 */}
+        {/* <img
           src={champion.imageUrl}
           alt={champion.name}
           className={styles.image}
-        />
+        /> */}
         {isDisabled && <div className={styles.disabledOverlay} />}
       </div>
       <span className={styles.name}>{champion.name}</span>

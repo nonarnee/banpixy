@@ -1,0 +1,12 @@
+$blue: #0A6DAE;
+$light-blue: #ADD8E6;
+$red: #AE2733;
+$green: #388E3C;
+$gold: #C8AA6E;
+$background: #1A1D24;
+
+@mixin button-colors($color: $blue) {
+  background-color: $background;
+  color: $color;
+  border: 1px solid $color;
+}

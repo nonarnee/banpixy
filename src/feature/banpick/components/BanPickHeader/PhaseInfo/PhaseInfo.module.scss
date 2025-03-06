@@ -1,0 +1,36 @@
+.phaseInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.teamIndicator {
+  width: 10rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+
+  &.blue {
+    background-color: rgba(10, 109, 174, 0.2);
+    color: #0A6DAE;
+    border: 1px solid #0A6DAE;
+  }
+
+  &.red {
+    background-color: rgba(174, 39, 51, 0.2);
+    color: #AE2733;
+    border: 1px solid #AE2733;
+  }
+}
+
+.phase {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #C8AA6E;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
