@@ -51,9 +51,77 @@
   color: #C8AA6E;
 }
 
-.timer {
+.startButton {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #AE2733;
+  background-color: rgba(200, 170, 110, 0.1);
+  border: 1px solid #AE2733;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(200, 170, 110, 0.2);
+  }
+}
+
+.rightContent {
   position: absolute;
   right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.controlButtonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(200, 170, 110, 0.1);
+  border: 1px solid #AE2733;
+  border-radius: 4px;
+  color: #AE2733;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(200, 170, 110, 0.2);
+  }
+
+  &.pause {
+    border-color: #388E3C;
+    color: #388E3C;
+  }
+
+  &.inProgress {
+    border-color: #AE2733;
+    color: #AE2733;
+  }
+
+  &.reset {
+    border-color: #ADD8E6;
+    color: #ADD8E6;
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.timer {
   display: flex;
   flex-direction: column;
   align-items: center;

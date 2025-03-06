@@ -12,6 +12,7 @@ interface ChampionSelectProps {
   disabledChampions: Champion[];
   currentTeam: Team;
   isBanPhase: boolean;
+  isInProgress: boolean;
   onSelect: (champion: Champion) => void;
   onSkipBan: () => void;
 }
@@ -20,6 +21,7 @@ export default function ChampionSelect({
   disabledChampions,
   currentTeam,
   isBanPhase,
+  isInProgress,
   onSelect,
   onSkipBan,
 }: ChampionSelectProps) {
@@ -30,6 +32,22 @@ export default function ChampionSelect({
       champion.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
+
+  const handleSelect = (champion: Champion) => {
+    if (!isInProgress) {
+      return;
+    }
+
+    onSelect(champion);
+  };
+
+  const handleSkipBan = () => {
+    if (!isInProgress) {
+      return;
+    }
+
+    onSkipBan();
+  };
 
   return (
     <div className={styles.container}>
@@ -43,7 +61,7 @@ export default function ChampionSelect({
         />
         {isBanPhase && (
           <button
-            onClick={onSkipBan}
+            onClick={handleSkipBan}
             className={styles.skipButton}
           >
             스킵
@@ -62,7 +80,7 @@ export default function ChampionSelect({
             key={champion.name}
             champion={champion}
             isDisabled={disabledChampions.some(c => c.name === champion.name)}
-            onClick={onSelect}
+            onClick={handleSelect}
           />
         ))}
       </div>

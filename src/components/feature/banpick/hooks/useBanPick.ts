@@ -9,6 +9,12 @@ export default function useBanPick() {
   const flow = useBanPickFlow(status.isInProgress, status.complete);
   const composition = useTeamComposition();
 
+  const handleReset = useCallback(() => {
+    status.reset();
+    flow.resetFlow();
+    composition.resetComposition();
+  }, [status, flow, composition]);
+
   // 랜덤 픽
   const selectRandomChampion = useCallback(() => {
     if (composition.availableChampions.length === 0) return;
@@ -79,5 +85,6 @@ export default function useBanPick() {
     composition,
     handleSelect,
     handleSkipBan,
+    handleReset,
   };
 } 

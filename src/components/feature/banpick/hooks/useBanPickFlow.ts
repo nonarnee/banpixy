@@ -20,6 +20,11 @@ export default function useBanPickFlow(
     setTime(BANPICK_TIME);
   }, []);
 
+  const resetFlow = useCallback(() => {
+    setCurrentPhase(PHASE_ORDER[0]);
+    resetTimer();
+  }, [resetTimer]);
+
   const goNextPhase = useCallback(() => {
     if (currentPhase === PHASE_ORDER[PHASE_ORDER.length - 1]) {
       onComplete();
@@ -51,5 +56,6 @@ export default function useBanPickFlow(
     isRedPhase,
     goNextPhase,
     resetTimer,
+    resetFlow,
   };
 } 

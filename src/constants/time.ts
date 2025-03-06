@@ -1,1 +1,1 @@
-export const BANPICK_TIME = 5;
+export const BANPICK_TIME = 30;

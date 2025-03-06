@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { Champion, BannedChampion } from '@/types/Champion';
 import { CHAMPIONS } from '@/constants/champion';
 
@@ -45,6 +45,13 @@ export default function useTeamComposition() {
     [bluePicks, redPicks, blueBans, redBans],
   );
 
+  const resetComposition = useCallback(() => {
+    setBluePicks([]);
+    setRedPicks([]);
+    setBlueBans([]);
+    setRedBans([]);
+  }, []);
+
   return {
     bluePicks,
     redPicks,
@@ -57,5 +64,6 @@ export default function useTeamComposition() {
     setRedPicks,
     setBlueBans,
     setRedBans,
+    resetComposition,
   };
 }

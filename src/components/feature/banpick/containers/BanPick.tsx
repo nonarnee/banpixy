@@ -16,13 +16,8 @@ export default function BanPick() {
     composition,
     handleSelect,
     handleSkipBan,
+    handleReset,
   } = useBanPick();
-
-  useEffect(() => {
-    if (status.isReady) {
-      status.start();
-    }
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -31,6 +26,12 @@ export default function BanPick() {
         phase={flow.currentPhase}
         time={flow.time}
         isEnd={status.isCompleted}
+        isInProgress={status.isInProgress}
+        isReady={status.isReady}
+        isPaused={status.isPaused}
+        onStart={status.start}
+        onPause={status.pause}
+        onReset={handleReset}
       />
 
       <div className={styles.content}>
@@ -47,6 +48,7 @@ export default function BanPick() {
             disabledChampions={composition.disabledChampions}
             currentTeam={flow.currentTeam}
             isBanPhase={flow.isBanPhase}
+            isInProgress={status.isInProgress}
             onSelect={handleSelect}
             onSkipBan={handleSkipBan}
           />
