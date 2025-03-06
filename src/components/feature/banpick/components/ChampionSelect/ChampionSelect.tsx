@@ -12,14 +12,16 @@ interface ChampionSelectProps {
   onSelect: (champion: Champion) => void;
   disabled: Champion[];
   currentTeam: Team;
-  isEnd: boolean;
+  isBanPhase: boolean;
+  onSkipBan: () => void;
 }
 
 export default function ChampionSelect({
   onSelect,
   disabled,
   currentTeam,
-  isEnd,
+  isBanPhase,
+  onSkipBan,
 }: ChampionSelectProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -39,6 +41,14 @@ export default function ChampionSelect({
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
+        {isBanPhase && (
+          <button
+            onClick={onSkipBan}
+            className={styles.skipButton}
+          >
+            스킵
+          </button>
+        )}
       </div>
 
       <div

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Phase } from '@/types/Phase';
 import { Team } from '@/types/Team';
-import { Champion } from '@/types/Champion';
+import { Champion, BannedChampion } from '@/types/Champion';
 import { BANPICK_TIME } from '@/constants/time';
 import { CHAMPIONS } from '@/constants/champion';
 import { PHASE_ORDER, TEAM_ORDER } from '@/constants/order';
@@ -12,8 +12,8 @@ interface BanPickState {
   timer: number;
   bluePicks: Champion[];
   redPicks: Champion[];
-  blueBans: Champion[];
-  redBans: Champion[];
+  blueBans: BannedChampion[];
+  redBans: BannedChampion[];
   isEnd: boolean;
 }
 
@@ -40,24 +40,27 @@ export default function useBanPick() {
   // 선택 가능한 챔피언들의 배열
   const availableChampions = useMemo(() =>
     CHAMPIONS.filter(champion =>
-      !selectedChampions.some(selected => selected.name === champion.name)
+      !selectedChampions
+        .filter(selected => selected !== null)
+        .some(selected => selected?.name === champion.name)
     )
     , [selectedChampions]);
 
   const nextPhase = useCallback(() => {
     const currentIndex = PHASE_ORDER.indexOf(state.phase);
-    if (currentIndex < PHASE_ORDER.length - 1) {
-      const nextPhase = PHASE_ORDER[currentIndex + 1];
+    const nextPhase = PHASE_ORDER[currentIndex + 1];
+
+    if (currentIndex === PHASE_ORDER.length - 1) {
+      setState(prev => ({
+        ...prev,
+        isEnd: true,
+      }));
+    } else {
       setState(prev => ({
         ...prev,
         phase: nextPhase,
         currentTeam: TEAM_ORDER[nextPhase],
         timer: BANPICK_TIME,
-      }));
-    } else {
-      setState(prev => ({
-        ...prev,
-        isEnd: true,
       }));
     }
   }, [state.phase]);
@@ -101,6 +104,21 @@ export default function useBanPick() {
     nextPhase();
   }, [nextPhase]);
 
+  const handleSkipBan = useCallback(() => {
+    if (!state.phase.startsWith('BAN')) return;
+
+    setState(prev => ({
+      ...prev,
+      blueBans: prev.currentTeam === 'blue'
+        ? [...prev.blueBans, null]
+        : prev.blueBans,
+      redBans: prev.currentTeam === 'red'
+        ? [...prev.redBans, null]
+        : prev.redBans,
+    }));
+    nextPhase();
+  }, [state.phase, nextPhase]);
+
   useEffect(() => {
     // 남은 시간 감소
     if (state.isEnd) return;
@@ -117,22 +135,29 @@ export default function useBanPick() {
   }, [selectRandomChampion]);
 
   useEffect(() => {
-    // 시간 초과시 랜덤 픽
+    // 시간 초과시
     if (state.isEnd) return;
 
-    if (state.timer <= 0) {
-      selectRandomChampion();
+    if (state.timer < 0) {
+      if (state.phase.startsWith('BAN')) {
+        // 밴 페이즈에서는 스킵
+        handleSkipBan();
+      } else {
+        // 픽 페이즈에서는 랜덤 픽
+        selectRandomChampion();
+      }
     }
   }, [state.timer]);
 
   return {
     ...state,
     handleSelect,
+    handleSkipBan,
     disabled: [
       ...state.bluePicks,
       ...state.redPicks,
       ...state.blueBans,
       ...state.redBans,
-    ],
+    ].filter(champion => champion !== null),
   };
 } 

@@ -18,6 +18,7 @@ export default function BanPick() {
     blueBans,
     redBans,
     handleSelect,
+    handleSkipBan,
     disabled,
     isEnd,
   } = useBanPick();
@@ -47,21 +48,23 @@ export default function BanPick() {
             team="blue"
             picks={bluePicks}
             bans={blueBans}
-            isActive={currentTeam === 'blue'}
+            isActive={!isEnd && currentTeam === 'blue'}
             activeSlot={getActiveSlot(phase)}
           />
 
           <ChampionSelect
-            onSelect={handleSelect}
             disabled={disabled}
             currentTeam={currentTeam}
+            isBanPhase={phase.startsWith('BAN')}
+            onSelect={handleSelect}
+            onSkipBan={handleSkipBan}
           />
 
           <TeamComposition
             team="red"
             picks={redPicks}
             bans={redBans}
-            isActive={currentTeam === 'red'}
+            isActive={!isEnd && currentTeam === 'red'}
             activeSlot={getActiveSlot(phase)}
           />
         </div>

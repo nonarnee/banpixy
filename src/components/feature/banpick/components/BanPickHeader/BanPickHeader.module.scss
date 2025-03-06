@@ -106,16 +106,12 @@
     height: 100%;
     transition: width 1s linear;
 
-    .blue & {
+    &.blue {
       background-color: #0A6DAE;
     }
 
-    .red & {
+    &.red {
       background-color: #AE2733;
-    }
-
-    .warning & {
-      background-color: #FF4655;
     }
   }
 }

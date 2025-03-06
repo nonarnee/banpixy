@@ -3,11 +3,12 @@ import { Champion } from '@/types/Champion';
 import { Team } from '@/types/Team';
 import { ActiveSlot } from '@/components/feature/banpick/utils/getActiveSlot';
 import clsx from 'clsx';
+import { BannedChampion } from '@/types/Champion';
 
 interface TeamCompositionProps {
   team: Team;
   picks: Champion[];
-  bans: Champion[];
+  bans: BannedChampion[];
   isActive: boolean;
   activeSlot: ActiveSlot;
 }
@@ -20,6 +21,7 @@ export default function TeamComposition({
   activeSlot,
 }: TeamCompositionProps) {
   const [[banpick, slot]] = Object.entries(activeSlot);
+  console.log(banpick, slot);
 
   return (
     <div className={clsx(styles.container, {
@@ -37,6 +39,7 @@ export default function TeamComposition({
               })}
             >
               {bans[i] && (
+                // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
                     src={bans[i].imageUrl}
@@ -44,6 +47,10 @@ export default function TeamComposition({
                   />
                   <div className={styles.banOverlay} />
                 </div>
+              )}
+              {bans[i] === null && (
+                // 밴 스킵
+                <div className={styles.banOverlay} />
               )}
             </div>
           ))}
@@ -57,7 +64,7 @@ export default function TeamComposition({
             className={clsx(styles.pickSlot, {
               [styles.empty]: !picks[i],
               [styles.selected]: picks[i],
-              [styles.current]: banpick === 'pick' && slot === i + 1,
+              [styles.current]: banpick === 'PICK' && slot === i + 1,
             })}
           >
             {picks[i] && (
@@ -81,6 +88,7 @@ export default function TeamComposition({
               })}
             >
               {bans[i] && (
+                // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
                     src={bans[i].imageUrl}
@@ -88,6 +96,10 @@ export default function TeamComposition({
                   />
                   <div className={styles.banOverlay} />
                 </div>
+              )}
+              {bans[i] === null && (
+                // 밴 스킵
+                <div className={styles.banOverlay} />
               )}
             </div>
           ))}
