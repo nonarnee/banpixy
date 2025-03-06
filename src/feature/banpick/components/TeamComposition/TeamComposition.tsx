@@ -1,25 +1,22 @@
 import styles from './TeamComposition.module.scss';
-import { Champion } from '@/types/Champion';
 import { Team } from '@/types/Team';
-import { ActiveSlot } from '@/components/feature/banpick/utils/getActiveSlot';
+import getActiveSlot from '@/feature/banpick/utils/getActiveSlot';
 import clsx from 'clsx';
-import { BannedChampion } from '@/types/Champion';
+import { useBanPickContext } from '../../contexts/BanPickContext';
 
 interface TeamCompositionProps {
   team: Team;
-  picks: Champion[];
-  bans: BannedChampion[];
-  isActive: boolean;
-  activeSlot: ActiveSlot;
 }
 
-export default function TeamComposition({
-  team,
-  picks,
-  bans,
-  isActive,
-  activeSlot,
-}: TeamCompositionProps) {
+export default function TeamComposition({ team }: TeamCompositionProps) {
+  const { status, composition, flow } = useBanPickContext();
+
+  const isActive = status.isInProgress && flow.currentTeam === team;
+  const picks = team === 'blue'
+    ? composition.bluePicks
+    : composition.redPicks;
+
+  const activeSlot = getActiveSlot(flow.currentPhase);
   const [[banpick, slot]] = Object.entries(activeSlot);
 
   return (
@@ -37,17 +34,17 @@ export default function TeamComposition({
                 [styles.current]: banpick === 'BAN' && slot === i + 1,
               })}
             >
-              {bans[i] && (
+              {composition.redBans[i] && (
                 // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={bans[i].imageUrl}
-                    alt={bans[i].name}
+                    src={composition.redBans[i].imageUrl}
+                    alt={composition.redBans[i].name}
                   />
                   <div className={styles.banOverlay} />
                 </div>
               )}
-              {bans[i] === null && (
+              {composition.redBans[i] === null && (
                 // 밴 스킵
                 <div className={styles.banOverlay} />
               )}
@@ -86,17 +83,17 @@ export default function TeamComposition({
                 [styles.current]: banpick === 'BAN' && slot === i + 1,
               })}
             >
-              {bans[i] && (
+              {composition.blueBans[i] && (
                 // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={bans[i].imageUrl}
-                    alt={bans[i].name}
+                    src={composition.blueBans[i].imageUrl}
+                    alt={composition.blueBans[i].name}
                   />
                   <div className={styles.banOverlay} />
                 </div>
               )}
-              {bans[i] === null && (
+              {composition.blueBans[i] === null && (
                 // 밴 스킵
                 <div className={styles.banOverlay} />
               )}

@@ -3,29 +3,21 @@
 import { useState, useMemo } from 'react';
 import clsx from 'clsx';
 import styles from './ChampionSelect.module.scss';
-import { Team } from '@/types/Team';
 import { Champion } from '@/types/Champion';
 import { CHAMPIONS } from '@/constants/champion';
-import ChampionItem from '@/components/feature/banpick/components/ChampionItem/ChampionItem';
+import ChampionItem from '@/feature/banpick/components/ChampionItem/ChampionItem';
+import { useBanPickContext } from '../../contexts/BanPickContext';
 
-interface ChampionSelectProps {
-  disabledChampions: Champion[];
-  currentTeam: Team;
-  isBanPhase: boolean;
-  isInProgress: boolean;
-  onSelect: (champion: Champion) => void;
-  onSkipBan: () => void;
-}
-
-export default function ChampionSelect({
-  disabledChampions,
-  currentTeam,
-  isBanPhase,
-  isInProgress,
-  onSelect,
-  onSkipBan,
-}: ChampionSelectProps) {
+export default function ChampionSelect() {
   const [searchQuery, setSearchQuery] = useState('');
+
+  const {
+    status,
+    flow,
+    composition,
+    pickChampion,
+    noBan,
+  } = useBanPickContext();
 
   const filteredChampions = useMemo(() => {
     return CHAMPIONS.filter(champion =>
@@ -33,20 +25,20 @@ export default function ChampionSelect({
     );
   }, [searchQuery]);
 
-  const handleSelect = (champion: Champion) => {
-    if (!isInProgress) {
+  const handleClickChampion = (champion: Champion) => {
+    if (!status.isInProgress) {
       return;
     }
 
-    onSelect(champion);
+    pickChampion(champion);
   };
 
-  const handleSkipBan = () => {
-    if (!isInProgress) {
+  const handleClickNoBan = () => {
+    if (!status.isInProgress) {
       return;
     }
 
-    onSkipBan();
+    noBan();
   };
 
   return (
@@ -59,9 +51,9 @@ export default function ChampionSelect({
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
-        {isBanPhase && (
+        {flow.isBanPhase && (
           <button
-            onClick={handleSkipBan}
+            onClick={handleClickNoBan}
             className={styles.skipButton}
           >
             노밴
@@ -71,16 +63,16 @@ export default function ChampionSelect({
 
       <div
         className={clsx(styles.grid, {
-          [styles.blueTeam]: currentTeam === 'blue',
-          [styles.redTeam]: currentTeam === 'red'
+          [styles.blueTeam]: flow.currentTeam === 'blue',
+          [styles.redTeam]: flow.currentTeam === 'red'
         })}
       >
         {filteredChampions.map(champion => (
           <ChampionItem
             key={champion.name}
             champion={champion}
-            isDisabled={disabledChampions.some(c => c.name === champion.name)}
-            onClick={handleSelect}
+            isDisabled={composition.disabledChampions.some(c => c.name === champion.name)}
+            onClick={handleClickChampion}
           />
         ))}
       </div>

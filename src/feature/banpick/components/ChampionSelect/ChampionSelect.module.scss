@@ -1,4 +1,4 @@
-@import '@/styles/colors.scss';
+@use '@/styles/colors.scss';
 
 .container {
   flex: 1;
@@ -84,7 +84,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  @include button-colors($red);
+  @include colors.button-colors(colors.$red);
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);

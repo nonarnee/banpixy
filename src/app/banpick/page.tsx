@@ -1,4 +1,4 @@
-import BanPick from '@/components/feature/banpick/containers/BanPick';
+import BanPick from '@/feature/banpick/containers/BanPick';
 
 export default async function BanPickPage() {
   return (

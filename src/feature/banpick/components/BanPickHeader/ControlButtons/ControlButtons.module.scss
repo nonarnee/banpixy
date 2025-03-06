@@ -1,4 +1,4 @@
-@import '@/styles/colors.scss';
+@use '@/styles/colors.scss';
 
 .controlButtonGroup {
   display: flex;
@@ -17,22 +17,22 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  @include button-colors($red);
+  @include colors.button-colors(colors.$red);
 
   &:hover {
     background-color: rgba(200, 170, 110, 0.2);
   }
 
   &.pause {
-    @include button-colors($green);
+    @include colors.button-colors(colors.$green);
   }
 
   &.inProgress {
-    @include button-colors($red);
+    @include colors.button-colors(colors.$red);
   }
 
   &.reset {
-    @include button-colors($light-blue);
+    @include colors.button-colors(colors.$light-blue);
   }
 }
 

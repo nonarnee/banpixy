@@ -20,14 +20,14 @@ export default function useBanPickStatus() {
     duration: BANPICK_TIME,
   });
 
-  const updateTimerConfig = useCallback((config: Partial<TimerConfig>) => {
+  const updateTimerConfig = (config: Partial<TimerConfig>) => {
     setTimerConfig((prev) => ({ ...prev, ...config }));
-  }, []);
+  };
 
-  const transition = useCallback((from: BanPickStatus[], to: BanPickStatus) => {
+  const transition = (from: BanPickStatus[], to: BanPickStatus) => {
     if (!from.includes(currentStatus)) return;
     setCurrentStatus(to);
-  }, [currentStatus]);
+  };
 
   return {
     currentStatus,

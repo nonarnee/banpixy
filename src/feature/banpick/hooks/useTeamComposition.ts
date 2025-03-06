@@ -45,12 +45,12 @@ export default function useTeamComposition() {
     [bluePicks, redPicks, blueBans, redBans],
   );
 
-  const resetComposition = useCallback(() => {
+  const resetComposition = () => {
     setBluePicks([]);
     setRedPicks([]);
     setBlueBans([]);
     setRedBans([]);
-  }, []);
+  };
 
   return {
     bluePicks,

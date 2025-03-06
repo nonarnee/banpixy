@@ -1,4 +1,4 @@
-@import '@/styles/colors.scss';
+@use '@/styles/colors.scss';
 
 .header {
   display: flex;
@@ -25,7 +25,7 @@
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  @include button-colors($light-blue);
+  @include colors.button-colors(colors.$light-blue);
 
   &:hover {
     background-color: rgba(200, 170, 110, 0.2);

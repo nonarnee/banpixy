@@ -9,22 +9,32 @@ export default function useBanPick() {
   const flow = useBanPickFlow(status.isInProgress, status.complete, status.timerConfig);
   const composition = useTeamComposition();
 
-  const handleReset = useCallback(() => {
+  const resetBanPick = () => {
     status.reset();
     flow.resetFlow();
     composition.resetComposition();
-  }, [status, flow, composition]);
+  };
 
   // 랜덤 픽
-  const selectRandomChampion = useCallback(() => {
+  const pickRandomChampion = () => {
     if (composition.availableChampions.length === 0) return;
 
     const randomIndex = Math.floor(Math.random() * composition.availableChampions.length);
     const randomChampion = composition.availableChampions[randomIndex];
-    handleSelect(randomChampion);
-  }, [composition.availableChampions]);
+    pickChampion(randomChampion);
+  };
 
-  const handleSelect = useCallback((champion: Champion) => {
+  const pickChampion = (champion: Champion) => {
+    if (!champion) {
+      console.error('잘못된 챔피언입니다.');
+      return;
+    }
+
+    if (composition.disabledChampions.includes(champion)) {
+      console.error('선택할 수 없는 챔피언입니다.');
+      return;
+    }
+
     if (flow.isPickPhase) {
       if (flow.isBluePhase) {
         composition.setBluePicks([...composition.bluePicks, champion]);
@@ -46,9 +56,9 @@ export default function useBanPick() {
     }
 
     flow.goNextPhase();
-  }, [flow, composition]);
+  };
 
-  const handleSkipBan = useCallback(() => {
+  const noBan = () => {
     if (!flow.isBanPhase) return;
 
     if (flow.isBluePhase) {
@@ -60,7 +70,7 @@ export default function useBanPick() {
     }
 
     flow.goNextPhase();
-  }, [flow, composition]);
+  };
 
   useEffect(() => {
     // 시간 초과시
@@ -69,23 +79,22 @@ export default function useBanPick() {
     if (flow.time < 0) {
       if (flow.isBanPhase) {
         // 밴 페이즈에서는 스킵
-        handleSkipBan();
+        noBan();
       }
 
       if (flow.isPickPhase) {
         // 픽 페이즈에서는 랜덤 픽
-        selectRandomChampion();
+        pickRandomChampion();
       }
     }
-  }, [flow]);
+  }, [flow, status.isInProgress]);
 
   return {
     status,
     flow,
     composition,
-    handleSelect,
-    handleSkipBan,
-    handleReset,
-    updateTimerConfig: status.updateTimerConfig,
+    pickChampion,
+    noBan,
+    resetBanPick,
   };
 } 
