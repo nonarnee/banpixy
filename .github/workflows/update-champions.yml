@@ -1,0 +1,12 @@
+name: Update Riot Data
+on:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel API to update Riot Data
+        run: curl -X POST "https://your-vercel-project.vercel.app/api/updateChampions"
+        
