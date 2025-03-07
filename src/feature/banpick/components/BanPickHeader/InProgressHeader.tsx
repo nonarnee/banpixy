@@ -14,8 +14,6 @@ export default function InProgressHeader() {
 
       <div className={styles.rightContent}>
         <ControlButtons />
-
-
         {status.timerConfig.enabled && <Timer time={flow.time} />}
       </div>
 

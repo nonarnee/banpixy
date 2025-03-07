@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
 
   &.blue {
     .pickSlot {
@@ -57,11 +57,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .banSlot {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.3);
   position: relative;

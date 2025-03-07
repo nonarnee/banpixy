@@ -4,11 +4,14 @@ import { useState, useMemo } from 'react';
 import clsx from 'clsx';
 import styles from './ChampionSelect.module.scss';
 import { Champion } from '@/types/Champion';
-import { CHAMPIONS } from '@/constants/champion';
 import ChampionItem from '@/feature/banpick/components/ChampionItem/ChampionItem';
 import { useBanPickContext } from '../../contexts/BanPickContext';
 
-export default function ChampionSelect() {
+interface ChampionSelectProps {
+  champions: Champion[];
+}
+
+export default function ChampionSelect({ champions }: ChampionSelectProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const {
@@ -20,10 +23,10 @@ export default function ChampionSelect() {
   } = useBanPickContext();
 
   const filteredChampions = useMemo(() => {
-    return CHAMPIONS.filter(champion =>
+    return champions.filter(champion =>
       champion.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchQuery, champions]);
 
   const handleClickChampion = (champion: Champion) => {
     if (!status.isInProgress) {
@@ -69,7 +72,7 @@ export default function ChampionSelect() {
       >
         {filteredChampions.map(champion => (
           <ChampionItem
-            key={champion.name}
+            key={champion.id}
             champion={champion}
             isDisabled={composition.disabledChampions.some(c => c.name === champion.name)}
             onClick={handleClickChampion}

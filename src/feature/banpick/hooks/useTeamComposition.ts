@@ -1,12 +1,18 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Champion, BannedChampion } from '@/types/Champion';
-import { CHAMPIONS } from '@/constants/champion';
 
 export default function useTeamComposition() {
+  const [champions, setChampions] = useState<Champion[]>([]);
   const [bluePicks, setBluePicks] = useState<Champion[]>([]);
   const [redPicks, setRedPicks] = useState<Champion[]>([]);
   const [blueBans, setBlueBans] = useState<BannedChampion[]>([]);
   const [redBans, setRedBans] = useState<BannedChampion[]>([]);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/champions`)
+      .then(res => res.json())
+      .then(data => setChampions(data));
+  }, []);
 
   // 선택된 챔피언들의 배열
   const selectedChampions = useMemo(() => [
@@ -30,7 +36,7 @@ export default function useTeamComposition() {
   ]);
 
   const availableChampions = useMemo(() =>
-    CHAMPIONS
+    champions
       .filter(champion => !selectedChampions.includes(champion))
       .filter(champion => !bannedChampions.includes(champion)),
     [selectedChampions, bannedChampions],

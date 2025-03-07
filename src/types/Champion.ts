@@ -1,6 +1,7 @@
 export interface Champion {
+  id: string;
   name: string;
-  imageUrl: string;
+  thumbnail: string;
 }
 
 export type BannedChampion = Champion | null;

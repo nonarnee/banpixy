@@ -38,7 +38,7 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
                 // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={composition.redBans[i].imageUrl}
+                    src={composition.redBans[i].thumbnail}
                     alt={composition.redBans[i].name}
                   />
                   <div className={styles.banOverlay} />
@@ -65,7 +65,7 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
           >
             {picks[i] && (
               <img
-                src={picks[i].imageUrl}
+                src={picks[i].thumbnail}
                 alt={picks[i].name}
                 className={styles.championImage}
               />
@@ -87,7 +87,7 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
                 // 밴 챔피언
                 <div className={styles.bannedChampion}>
                   <img
-                    src={composition.blueBans[i].imageUrl}
+                    src={composition.blueBans[i].thumbnail}
                     alt={composition.blueBans[i].name}
                   />
                   <div className={styles.banOverlay} />
