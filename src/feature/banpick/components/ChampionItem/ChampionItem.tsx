@@ -1,25 +1,30 @@
 import clsx from 'clsx';
 import styles from './ChampionItem.module.scss';
 import { Champion } from '@/types/Champion';
-
 interface ChampionItemProps {
   champion: Champion;
-  isDisabled?: boolean;
+  isInProgress: boolean;
+  isNotSelectable?: boolean;
   onClick: (champion: Champion) => void;
 }
 
 export default function ChampionItem({
   champion,
-  isDisabled,
+  isInProgress,
+  isNotSelectable,
   onClick
 }: ChampionItemProps) {
+  const handleClickChampion = () => {
+    if (!isInProgress || isNotSelectable) return;
+
+    onClick(champion);
+  };
+
   return (
     <button
-      className={clsx(styles.championItem, {
-        [styles.disabled]: isDisabled
-      })}
-      onClick={() => onClick(champion)}
-      disabled={isDisabled}
+      className={styles.championItem}
+      onClick={handleClickChampion}
+      disabled={isNotSelectable || !isInProgress}
     >
       <div className={styles.imageWrapper}>
         <img
@@ -27,7 +32,7 @@ export default function ChampionItem({
           alt={champion.name}
           className={styles.image}
         />
-        {isDisabled && <div className={styles.disabledOverlay} />}
+        {isNotSelectable && <div className={styles.disabledOverlay} />}
       </div>
       <span className={styles.name}>{champion.name}</span>
     </button>

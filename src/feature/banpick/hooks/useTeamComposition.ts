@@ -18,13 +18,9 @@ export default function useTeamComposition() {
   const selectedChampions = useMemo(() => [
     ...bluePicks,
     ...redPicks,
-    ...blueBans,
-    ...redBans,
   ], [
     bluePicks,
     redPicks,
-    blueBans,
-    redBans,
   ]);
 
   const bannedChampions = useMemo(() => [

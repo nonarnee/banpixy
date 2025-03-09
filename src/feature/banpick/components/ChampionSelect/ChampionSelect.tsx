@@ -18,9 +18,11 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
     status,
     flow,
     composition,
-    pickChampion,
-    noBan,
+    selectRandom,
+    confirmSelection,
   } = useBanPickContext();
+  const isSelection = flow.currentSelection?.type === 'NO_BAN'
+    || flow.currentSelection?.champion;
 
   const filteredChampions = useMemo(() => {
     return champions.filter(champion =>
@@ -29,19 +31,21 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
   }, [searchQuery, champions]);
 
   const handleClickChampion = (champion: Champion) => {
-    if (!status.isInProgress) {
-      return;
-    }
-
-    pickChampion(champion);
+    flow.selectChampion(champion);
   };
 
   const handleClickNoBan = () => {
-    if (!status.isInProgress) {
-      return;
-    }
+    flow.selectNoBan();
+  };
 
-    noBan();
+  const handleClickRandom = () => {
+    selectRandom();
+  };
+
+  const handleClickConfirm = () => {
+    if (!isSelection) return;
+
+    confirmSelection();
   };
 
   return (
@@ -54,14 +58,6 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
-        {flow.isBanPhase && (
-          <button
-            onClick={handleClickNoBan}
-            className={styles.skipButton}
-          >
-            노밴
-          </button>
-        )}
       </div>
 
       <div
@@ -70,14 +66,46 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
           [styles.redTeam]: flow.currentTeam === 'red'
         })}
       >
+        {flow.isBanPhase && (
+          <button
+            onClick={handleClickNoBan}
+            className={clsx(styles.specialButton, styles.noBanButton)}
+          >
+            노밴
+          </button>
+        )}
+
+        {flow.isPickPhase && (
+          <button
+            onClick={handleClickRandom}
+            className={clsx(styles.specialButton, styles.randomButton)}
+          >
+            랜덤
+          </button>
+        )}
+
         {filteredChampions.map(champion => (
           <ChampionItem
             key={champion.id}
             champion={champion}
-            isDisabled={composition.disabledChampions.some(c => c.name === champion.name)}
+            isInProgress={status.isInProgress}
+            isNotSelectable={
+              composition.disabledChampions
+                .some(c => c.name === champion.name)
+            }
             onClick={handleClickChampion}
           />
         ))}
+      </div>
+
+      <div className={styles.selectButtons}>
+        <button
+          onClick={handleClickConfirm}
+          className={styles.confirmButton}
+          disabled={!status.isInProgress || !isSelection}
+        >
+          {status.isInProgress ? '선택하기' : '밴픽 대기중'}
+        </button>
       </div>
     </div>
   );
