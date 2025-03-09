@@ -13,7 +13,7 @@ interface BanPickProps {
 
 export default function BanPick({ champions }: BanPickProps) {
   return (
-    <BanPickProvider>
+    <BanPickProvider champions={champions}>
       <div className={styles.container}>
         <BanPickHeader />
 

@@ -3,6 +3,7 @@ import styles from './ChampionItem.module.scss';
 import { Champion } from '@/types/Champion';
 interface ChampionItemProps {
   champion: Champion;
+  isCurrent: boolean;
   isInProgress: boolean;
   isNotSelectable?: boolean;
   onClick: (champion: Champion) => void;
@@ -10,6 +11,7 @@ interface ChampionItemProps {
 
 export default function ChampionItem({
   champion,
+  isCurrent,
   isInProgress,
   isNotSelectable,
   onClick
@@ -22,7 +24,9 @@ export default function ChampionItem({
 
   return (
     <button
-      className={styles.championItem}
+      className={clsx(styles.championItem, {
+        [styles.current]: isCurrent,
+      })}
       onClick={handleClickChampion}
       disabled={isNotSelectable || !isInProgress}
     >

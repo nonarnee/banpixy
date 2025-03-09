@@ -88,6 +88,7 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
           <ChampionItem
             key={champion.id}
             champion={champion}
+            isCurrent={flow.currentSelection?.champion?.id === champion.id}
             isInProgress={status.isInProgress}
             isNotSelectable={
               composition.disabledChampions

@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useBanPickStatus from './useBanPickStatus';
 import useTeamComposition from './useTeamComposition';
 import useBanPickFlow from './useBanPickFlow';
 import withInProgress from '../utils/withInProgress';
 import { Champion } from '@/types/Champion';
-import { Selection } from '@/types/Selection';
 
-export default function useBanPick() {
+export default function useBanPick(champions: Champion[]) {
   const status = useBanPickStatus();
   const flow = useBanPickFlow(status.isInProgress, status.complete, status.timerConfig);
-  const composition = useTeamComposition();
+  const composition = useTeamComposition(champions);
 
   const selectRandom = withInProgress(() => {
     if (composition.availableChampions.length === 0) return;
@@ -64,23 +63,11 @@ export default function useBanPick() {
     }
 
     if (flow.isPickPhase) {
-      if (flow.isBluePhase) {
-        composition.setBluePicks([...composition.bluePicks, champion]);
-      }
-
-      if (flow.isRedPhase) {
-        composition.setRedPicks([...composition.redPicks, champion]);
-      }
+      composition.updatePick(flow.currentTeam, champion);
     }
 
     if (flow.isBanPhase) {
-      if (flow.isBluePhase) {
-        composition.setBlueBans([...composition.blueBans, champion]);
-      }
-
-      if (flow.isRedPhase) {
-        composition.setRedBans([...composition.redBans, champion]);
-      }
+      composition.updateBan(flow.currentTeam, champion);
     }
 
     flow.goNextPhase();
@@ -89,14 +76,7 @@ export default function useBanPick() {
   const noBan = () => {
     if (!flow.isBanPhase) return;
 
-    if (flow.isBluePhase) {
-      composition.setBlueBans([...composition.blueBans, null]);
-    }
-
-    if (flow.isRedPhase) {
-      composition.setRedBans([...composition.redBans, null]);
-    }
-
+    composition.updateBan(flow.currentTeam, null);
     flow.goNextPhase();
   };
 

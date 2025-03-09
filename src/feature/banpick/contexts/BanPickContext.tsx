@@ -1,10 +1,16 @@
 import { createContext, useContext, ReactNode } from 'react';
 import useBanPick from '../hooks/useBanPick';
+import { Champion } from '@/types/Champion';
 
 const BanPickContext = createContext<ReturnType<typeof useBanPick> | null>(null);
 
-export function BanPickProvider({ children }: { children: ReactNode }) {
-  const banPickState = useBanPick();
+interface BanPickProviderProps {
+  children: ReactNode;
+  champions: Champion[];
+}
+
+export function BanPickProvider({ children, champions }: BanPickProviderProps) {
+  const banPickState = useBanPick(champions);
 
   return (
     <BanPickContext.Provider value={banPickState}>
