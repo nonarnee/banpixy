@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import styles from './ChampionItem.module.scss';
 import { Champion } from '@/types/Champion';
+
 interface ChampionItemProps {
   champion: Champion;
   isCurrent: boolean;

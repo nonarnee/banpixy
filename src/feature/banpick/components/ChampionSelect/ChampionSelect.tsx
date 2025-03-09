@@ -6,6 +6,7 @@ import styles from './ChampionSelect.module.scss';
 import { Champion } from '@/types/Champion';
 import ChampionItem from '@/feature/banpick/components/ChampionItem/ChampionItem';
 import { useBanPickContext } from '../../contexts/BanPickContext';
+import CustomItem from '../ChampionItem/CustomItem';
 
 interface ChampionSelectProps {
   champions: Champion[];
@@ -67,21 +68,23 @@ export default function ChampionSelect({ champions }: ChampionSelectProps) {
         })}
       >
         {flow.isBanPhase && (
-          <button
+          <CustomItem
+            name="노밴"
+            innerText="NO"
+            isCurrent={flow.currentSelection?.type === 'NO_BAN'}
+            isInProgress={status.isInProgress}
             onClick={handleClickNoBan}
-            className={clsx(styles.specialButton, styles.noBanButton)}
-          >
-            노밴
-          </button>
+          />
         )}
 
         {flow.isPickPhase && (
-          <button
+          <CustomItem
+            name="랜덤"
+            innerText="?"
+            isCurrent={false}
+            isInProgress={status.isInProgress}
             onClick={handleClickRandom}
-            className={clsx(styles.specialButton, styles.randomButton)}
-          >
-            랜덤
-          </button>
+          />
         )}
 
         {filteredChampions.map(champion => (

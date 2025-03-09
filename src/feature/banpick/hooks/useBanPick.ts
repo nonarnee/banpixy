@@ -12,7 +12,6 @@ export default function useBanPick(champions: Champion[]) {
 
   const selectRandom = withInProgress(() => {
     if (composition.availableChampions.length === 0) return;
-    console.log(composition.availableChampions);
 
     const randomIndex = Math.floor(Math.random() * composition.availableChampions.length);
     const randomChampion = composition.availableChampions[randomIndex];
