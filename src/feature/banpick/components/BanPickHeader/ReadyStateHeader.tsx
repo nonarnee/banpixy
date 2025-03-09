@@ -3,6 +3,12 @@ import styles from './BanPickHeader.module.scss';
 
 export default function ReadyStateHeader() {
   const { status } = useBanPickContext();
+  const getValidatedInputTime = (inputTime: number) => {
+    if (inputTime < 1) return 1;
+    if (inputTime > 60) return 60;
+
+    return inputTime;
+  }
 
   const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     status.updateTimerConfig({
@@ -14,7 +20,7 @@ export default function ReadyStateHeader() {
   const handleChangeTimerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     status.updateTimerConfig({
       ...status.timerConfig,
-      duration: Number(e.target.value)
+      duration: getValidatedInputTime(Number(e.target.value)),
     });
   };
 

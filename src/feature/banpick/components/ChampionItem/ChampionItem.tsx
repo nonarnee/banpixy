@@ -4,31 +4,40 @@ import { Champion } from '@/types/Champion';
 
 interface ChampionItemProps {
   champion: Champion;
-  isDisabled?: boolean;
+  isCurrent: boolean;
+  isInProgress: boolean;
+  isNotSelectable?: boolean;
   onClick: (champion: Champion) => void;
 }
 
 export default function ChampionItem({
   champion,
-  isDisabled,
+  isCurrent,
+  isInProgress,
+  isNotSelectable,
   onClick
 }: ChampionItemProps) {
+  const handleClickChampion = () => {
+    if (!isInProgress || isNotSelectable) return;
+
+    onClick(champion);
+  };
+
   return (
     <button
       className={clsx(styles.championItem, {
-        [styles.disabled]: isDisabled
+        [styles.current]: isCurrent,
       })}
-      onClick={() => onClick(champion)}
-      disabled={isDisabled}
+      onClick={handleClickChampion}
+      disabled={isNotSelectable || !isInProgress}
     >
       <div className={styles.imageWrapper}>
-        {/* TODO: 이미지 추가 후 주석 해제 */}
-        {/* <img
-          src={champion.imageUrl}
+        <img
+          src={champion.thumbnail}
           alt={champion.name}
           className={styles.image}
-        /> */}
-        {isDisabled && <div className={styles.disabledOverlay} />}
+        />
+        {isNotSelectable && <div className={styles.disabledOverlay} />}
       </div>
       <span className={styles.name}>{champion.name}</span>
     </button>

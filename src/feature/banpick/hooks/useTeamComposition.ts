@@ -1,69 +1,115 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Champion, BannedChampion } from '@/types/Champion';
-import { CHAMPIONS } from '@/constants/champion';
+import { Team } from '@/types/Team';
 
-export default function useTeamComposition() {
-  const [bluePicks, setBluePicks] = useState<Champion[]>([]);
-  const [redPicks, setRedPicks] = useState<Champion[]>([]);
-  const [blueBans, setBlueBans] = useState<BannedChampion[]>([]);
-  const [redBans, setRedBans] = useState<BannedChampion[]>([]);
+interface CompositionState {
+  picks: Record<Team, Champion[]>;
+  bans: Record<Team, (Champion | null)[]>;
+}
 
-  // 선택된 챔피언들의 배열
-  const selectedChampions = useMemo(() => [
-    ...bluePicks,
-    ...redPicks,
-    ...blueBans,
-    ...redBans,
+export default function useTeamComposition(champions: Champion[]) {
+  const [composition, setComposition] = useState<CompositionState>({
+    picks: {
+      blue: [],
+      red: [],
+    },
+    bans: {
+      blue: [],
+      red: [],
+    },
+  });
+
+  const updatePick = (team: Team, champion: Champion) => {
+    setComposition(prev => ({
+      ...prev,
+      picks: {
+        ...prev.picks,
+        [team]: [
+          ...prev.picks[team],
+          champion,
+        ],
+      },
+    }));
+  };
+
+  const updateBan = (team: Team, champion: Champion | null) => {
+    setComposition(prev => ({
+      ...prev,
+      bans: {
+        ...prev.bans,
+        [team]: [
+          ...prev.bans[team],
+          champion,
+        ],
+      },
+    }));
+  };
+
+  const pickedChampions = useMemo(() => [
+    ...composition.picks.blue,
+    ...composition.picks.red,
   ], [
-    bluePicks,
-    redPicks,
-    blueBans,
-    redBans,
+    composition.picks.blue,
+    composition.picks.red,
   ]);
 
   const bannedChampions = useMemo(() => [
-    ...blueBans,
-    ...redBans,
+    ...composition.bans.blue,
+    ...composition.bans.red,
   ], [
-    blueBans,
-    redBans,
+    composition.bans.blue,
+    composition.bans.red,
   ]);
 
   const availableChampions = useMemo(() =>
-    CHAMPIONS
-      .filter(champion => !selectedChampions.includes(champion))
-      .filter(champion => !bannedChampions.includes(champion)),
-    [selectedChampions, bannedChampions],
+    champions
+      .filter(champion =>
+        !pickedChampions
+          .map(({ id: pickedId }) => pickedId)
+          .includes(champion.id)
+      )
+      .filter(champion =>
+        !bannedChampions
+          .filter((champion) => champion !== null)
+          .map(({ id: bannedId }) => bannedId)
+          .includes(champion.id)
+      ),
+    [pickedChampions, bannedChampions],
   );
 
   const disabledChampions = useMemo(() => [
-    ...bluePicks,
-    ...redPicks,
-    ...blueBans,
-    ...redBans,
+    ...composition.picks.blue,
+    ...composition.picks.red,
+    ...composition.bans.blue,
+    ...composition.bans.red,
   ].filter(champion => champion !== null),
-    [bluePicks, redPicks, blueBans, redBans],
+    [composition.picks.blue, composition.picks.red, composition.bans.blue, composition.bans.red],
   );
 
   const resetComposition = () => {
-    setBluePicks([]);
-    setRedPicks([]);
-    setBlueBans([]);
-    setRedBans([]);
+    setComposition({
+      picks: {
+        blue: [],
+        red: [],
+      },
+      bans: {
+        blue: [],
+        red: [],
+      },
+    });
   };
 
   return {
-    bluePicks,
-    redPicks,
-    blueBans,
-    redBans,
-    selectedChampions,
+    bluePicks: composition.picks.blue,
+    redPicks: composition.picks.red,
+    blueBans: composition.bans.blue,
+    redBans: composition.bans.red,
+    pickedChampions,
+    bannedChampions,
     availableChampions,
     disabledChampions,
-    setBluePicks,
-    setRedPicks,
-    setBlueBans,
-    setRedBans,
+    updatePick,
+    updateBan,
     resetComposition,
   };
 }

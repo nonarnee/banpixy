@@ -1,15 +1,17 @@
 import clsx from 'clsx';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import styles from './BanPickHeader.module.scss';
+import buttonStyles from './ControlButtons/ControlButtons.module.scss';
 import { useBanPickContext } from '../../contexts/BanPickContext';
 
 export default function EndStateHeader() {
-  const { status } = useBanPickContext();
+  const { status, resetBanPick } = useBanPickContext();
 
-  const handleClickResetButton = () => {
+  const handleClickReset = () => {
     status.pause();
 
-    if (confirm('초기화하시겠습니까?')) {
-      status.reset();
+    if (confirm('밴픽을 초기화 하시겠습니까?')) {
+      resetBanPick();
     }
   };
 
@@ -20,10 +22,10 @@ export default function EndStateHeader() {
       </div>
       <div className={styles.rightContent}>
         <button
-          className={clsx(styles.controlButton, styles.reset)}
-          onClick={handleClickResetButton}
+          onClick={handleClickReset}
+          className={clsx(buttonStyles.controlButton, buttonStyles.reset)}
         >
-          초기화
+          <ArrowPathIcon className={buttonStyles.icon} />
         </button>
       </div>
     </header>
