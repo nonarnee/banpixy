@@ -8,8 +8,8 @@ export default function ProgressBar() {
   const { flow } = useBanPickContext();
 
   const progress = settings.timer.enabled
-    ? (flow.time / settings.timer.duration) * 100
-    : 100;
+    ? (flow.time / settings.timer.duration) * 50
+    : 50;
 
   return (
     <div
@@ -22,9 +22,15 @@ export default function ProgressBar() {
       <div
         className={clsx(styles.progress, {
           [styles.blue]: flow.currentTeam === 'blue',
+        })}
+        style={{ width: `${flow.currentTeam === 'blue' ? progress : 50}%` }}
+      />
+      <div className={styles.line} />
+      <div
+        className={clsx(styles.progress, {
           [styles.red]: flow.currentTeam === 'red',
         })}
-        style={{ width: `${progress}%` }}
+        style={{ width: `${flow.currentTeam === 'red' ? progress : 50}%` }}
       />
     </div>
   );

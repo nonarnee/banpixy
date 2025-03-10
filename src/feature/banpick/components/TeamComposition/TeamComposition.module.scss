@@ -1,22 +1,44 @@
+@use '@/styles/colors';
+
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.teamName {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #FFF;
+
+  &.blue {
+    text-align: left;
+  }
+
+  &.red {
+    text-align: right;
+  }
+}
+
+.slots {
   display: flex;
   gap: 1rem;
 
   &.blue {
     .pickSlot {
-      border-color: #0A6DAE;
+      border-color: colors.$blue;
     }
   }
 
   &.red {
     .pickSlot {
-      border-color: #AE2733;
+      border-color: colors.$red;
     }
   }
 
   &.active {
     .current {
-      border-color: #C8AA6E;
+      border-color: colors.$gold;
       box-shadow: 0 0 15px rgba(200, 170, 110, 0.5);
       animation: pulse 2s infinite;
     }
@@ -31,7 +53,7 @@
 
 .pickSlot {
   flex: 1;
-  height: 120px;
+  height: calc((100vh - 11rem)/5);
   aspect-ratio: 1;
   border: 2px solid;
   border-radius: 8px;
@@ -44,6 +66,10 @@
 
   &.selected {
     background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &.hasTeamName {
+    height: calc((100vh - 15rem)/5);
   }
 }
 
@@ -105,7 +131,7 @@
     left: -25%;
     width: 150%;
     height: 2px;
-    background-color: #FF4655;
+    background-color: colors.$red;
     transform: rotate(-45deg);
   }
 }
