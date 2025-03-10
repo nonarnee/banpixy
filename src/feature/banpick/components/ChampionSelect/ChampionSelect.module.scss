@@ -4,13 +4,33 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   max-width: 50rem;
   height: 100%;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
 }
+
+.globalBans {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.globalBan {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 
 .searchBar {
   display: flex;
@@ -19,6 +39,26 @@
   padding: 0.5rem 0;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
+}
+
+.lanes {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-right: 3.5rem;
+}
+
+.laneButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &.selected {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
 .searchInput {

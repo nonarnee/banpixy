@@ -5,12 +5,14 @@ import clsx from 'clsx';
 import { useBanPickContext } from '../../contexts/BanPickContext';
 import PickSlots from './PickSlots';
 import BanSlots from './BanSlots';
+import { useSettingsContext } from '../../contexts/SettingsContext';
 
 interface TeamCompositionProps {
   team: Team;
 }
 
 export default function TeamComposition({ team }: TeamCompositionProps) {
+  const { settings } = useSettingsContext();
   const { status, composition, flow } = useBanPickContext();
 
   const isActive = status.isInProgress && flow.currentTeam === team;
@@ -39,6 +41,7 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
       banpick={banpick}
       slot={slot}
       previewImage={getPreviewImage()}
+      hasTeamName={!!settings.teamName[team]}
     />,
     <BanSlots
       key={`${team}-ban`}
@@ -51,13 +54,24 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
   ];
 
   return (
-    <div className={clsx(styles.container, {
-      [styles.blue]: team === 'blue',
-      [styles.red]: team === 'red',
-      [styles.active]: isActive,
-    })}>
-      {team === 'blue' && slots}
-      {team === 'red' && slots.reverse()}
+    <div className={styles.container}>
+      {!!settings.teamName[team] && (
+        <h2 className={clsx(styles.teamName, {
+          [styles.blue]: team === 'blue',
+          [styles.red]: team === 'red',
+        })}>
+          {settings.teamName[team]}
+        </h2>
+      )}
+      <div className={clsx(styles.slots, {
+        [styles.blue]: team === 'blue',
+        [styles.red]: team === 'red',
+        [styles.active]: isActive,
+      })}
+      >
+        {team === 'blue' && slots}
+        {team === 'red' && slots.reverse()}
+      </div>
     </div>
   );
 }

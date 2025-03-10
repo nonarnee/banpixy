@@ -4,6 +4,7 @@ import styles from './SettingsModal.module.scss';
 import TimerSettings from './TimerSettings';
 import GlobalBanSettings from './GlobalBanSettings';
 import { DEFAULT_SETTINGS } from '@/constants/settings';
+import TeamNameSetting from './TeamNameSetting';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -19,6 +20,17 @@ export default function SettingsModal({
   onSave,
 }: SettingsModalProps) {
   const [localSettings, setLocalSettings] = useState(settings);
+  console.log(localSettings);
+
+  const handleChangeTeamName = (team: 'blue' | 'red', name: string) => {
+    setLocalSettings({
+      ...localSettings,
+      teamName: {
+        ...localSettings.teamName,
+        [team]: name,
+      },
+    });
+  };
 
   const handleToggleTimer = () => {
     setLocalSettings({
@@ -63,7 +75,12 @@ export default function SettingsModal({
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h2>밴픽 설정</h2>
+        <h2>🛠️ 설정</h2>
+
+        <TeamNameSetting
+          teamName={localSettings.teamName}
+          onChange={handleChangeTeamName}
+        />
 
         <TimerSettings
           timer={localSettings.timer}

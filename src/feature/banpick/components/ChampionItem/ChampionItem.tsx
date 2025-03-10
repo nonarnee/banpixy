@@ -36,6 +36,7 @@ export default function ChampionItem({
           src={champion.thumbnail}
           alt={champion.name}
           className={styles.image}
+          draggable={false}
         />
         {isNotSelectable && <div className={styles.disabledOverlay} />}
       </div>

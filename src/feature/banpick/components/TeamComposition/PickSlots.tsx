@@ -8,6 +8,7 @@ interface PickSlotsProps {
   banpick: string;
   slot: number;
   previewImage?: string;
+  hasTeamName: boolean;
 }
 
 export default function PickSlots({
@@ -16,6 +17,7 @@ export default function PickSlots({
   banpick,
   slot,
   previewImage,
+  hasTeamName,
 }: PickSlotsProps) {
   return (
     <div className={styles.picks}>
@@ -26,6 +28,7 @@ export default function PickSlots({
             [styles.empty]: !picks[i],
             [styles.selected]: picks[i],
             [styles.current]: banpick === 'PICK' && slot === i + 1,
+            [styles.hasTeamName]: hasTeamName,
           })}
         >
           {picks[i] ? (

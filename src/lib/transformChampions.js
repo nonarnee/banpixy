@@ -18,17 +18,17 @@ function getChampionLanes(champion) {
   if (championLanes.TOP.includes(champion.id)) {
     lanes.push(ChampionLane.TOP);
   }
-  if (championLanes.JUNGLE.includes(champion.id)) {
-    lanes.push(ChampionLane.JUNGLE);
+  if (championLanes.JGL.includes(champion.id)) {
+    lanes.push(ChampionLane.JGL);
   }
   if (championLanes.MID.includes(champion.id)) {
     lanes.push(ChampionLane.MID);
   }
-  if (championLanes.ADC.includes(champion.id)) {
-    lanes.push(ChampionLane.ADC);
+  if (championLanes.BOT.includes(champion.id)) {
+    lanes.push(ChampionLane.BOT);
   }
-  if (championLanes.SUPPORT.includes(champion.id)) {
-    lanes.push(ChampionLane.SUPPORT);
+  if (championLanes.SUP.includes(champion.id)) {
+    lanes.push(ChampionLane.SUP);
   }
 
   if (!lanes.length) {
@@ -37,4 +37,3 @@ function getChampionLanes(champion) {
 
   return lanes;
 }
-

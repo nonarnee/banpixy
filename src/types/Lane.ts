@@ -1,7 +1,7 @@
 export enum ChampionLane {
   TOP = 'TOP',
-  JUNGLE = 'JUNGLE',
+  JGL = 'JGL',
   MID = 'MID',
-  ADC = 'ADC',
-  SUPPORT = 'SUPPORT',
+  BOT = 'BOT',
+  SUP = 'SUP',
 }
