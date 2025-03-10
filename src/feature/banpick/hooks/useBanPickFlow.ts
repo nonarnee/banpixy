@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import withInProgress from '../utils/withInProgress';
 import { PHASE_ORDER, TEAM_ORDER } from '@/constants/order';
 import { Phase } from '@/types/Phase';
-import { TimerConfig } from './useBanPickStatus';
-import withInProgress from '../utils/withInProgress';
+import { TimerConfig } from '@/types/Settings';
 import { Champion } from '@/types/Champion';
 import { Selection } from '@/types/Selection';
 
@@ -15,7 +15,7 @@ export default function useBanPickFlow(
   const [time, setTime] = useState(timerConfig.duration);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
 
-  // timerConfig.duration이 변경될 때마다 time 상태 업데이트
+  // duration이 변경될 때마다 time 상태 업데이트
   useEffect(() => {
     setTime(timerConfig.duration);
   }, [timerConfig.duration]);

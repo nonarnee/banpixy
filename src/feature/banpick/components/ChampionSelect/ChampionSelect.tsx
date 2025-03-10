@@ -7,12 +7,10 @@ import { Champion } from '@/types/Champion';
 import ChampionItem from '@/feature/banpick/components/ChampionItem/ChampionItem';
 import { useBanPickContext } from '../../contexts/BanPickContext';
 import CustomItem from '../ChampionItem/CustomItem';
+import { useChampionsContext } from '@/contexts/ChampionsContext';
 
-interface ChampionSelectProps {
-  champions: Champion[];
-}
-
-export default function ChampionSelect({ champions }: ChampionSelectProps) {
+export default function ChampionSelect() {
+  const champions = useChampionsContext();
   const [searchQuery, setSearchQuery] = useState('');
 
   const {

@@ -4,4 +4,10 @@ export interface Champion {
   thumbnail: string;
 }
 
+export interface ChampionRaw {
+  id: string;
+  name: string;
+  version: string;
+}
+
 export type BannedChampion = Champion | null;

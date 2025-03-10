@@ -1,28 +1,28 @@
+import { useState } from 'react';
 import { useBanPickContext } from '../../contexts/BanPickContext';
+import { useSettingsContext } from '../../contexts/SettingsContext';
 import styles from './BanPickHeader.module.scss';
+import SettingsModal from '../SettingsModal/SettingsModal';
+import { BanPickSettings } from '@/types/Settings';
 
 export default function ReadyStateHeader() {
+  const { settings, updateSettings } = useSettingsContext();
   const { status } = useBanPickContext();
-  const getValidatedInputTime = (inputTime: number) => {
-    if (inputTime < 1) return 1;
-    if (inputTime > 60) return 60;
 
-    return inputTime;
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const handleClickSettingsButton = () => {
+    setIsSettingsOpen(!isSettingsOpen);
   }
 
-  const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    status.updateTimerConfig({
-      ...status.timerConfig,
-      enabled: e.target.checked
-    });
-  };
+  const handleCloseSettingsModal = () => {
+    setIsSettingsOpen(false);
+  }
 
-  const handleChangeTimerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    status.updateTimerConfig({
-      ...status.timerConfig,
-      duration: getValidatedInputTime(Number(e.target.value)),
-    });
-  };
+  const handleClickSaveSettings = (settings: BanPickSettings) => {
+    updateSettings(settings);
+    setIsSettingsOpen(false);
+  }
 
   const handleClickStart = () => {
     status.start();
@@ -31,34 +31,29 @@ export default function ReadyStateHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.readyContent}>
-        <div className={styles.timerConfig}>
-          <label className={styles.timerToggle}>
-            <input
-              type="checkbox"
-              checked={status.timerConfig.enabled}
-              onChange={handleChangeCheckbox}
-            />
-            <span>타이머 사용</span>
-          </label>
+        <button
+          className={styles.settingButton}
+          onClick={handleClickSettingsButton}
+        >
+          설정
+        </button>
 
-          {status.timerConfig.enabled && (
-            <div className={styles.timerDuration}>
-              <input
-                type="number"
-                min="1"
-                max="60"
-                value={status.timerConfig.duration}
-                onChange={handleChangeTimerInput}
-              />
-              <span>초</span>
-            </div>
-          )}
-        </div>
-
-        <button onClick={handleClickStart} className={styles.startButton}>
+        <button
+          onClick={handleClickStart}
+          className={styles.startButton}
+        >
           시작하기
         </button>
       </div>
+
+      {isSettingsOpen && (
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={handleCloseSettingsModal}
+          settings={settings}
+          onSave={handleClickSaveSettings}
+        />
+      )}
     </header>
   );
 }
