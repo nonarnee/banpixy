@@ -4,11 +4,12 @@ import useTeamComposition from './useTeamComposition';
 import useBanPickFlow from './useBanPickFlow';
 import withInProgress from '../utils/withInProgress';
 import { Champion } from '@/types/Champion';
+import { BanPickSettings } from '@/types/Settings';
 
-export default function useBanPick(champions: Champion[]) {
+export default function useBanPick(champions: Champion[], settings: BanPickSettings) {
   const status = useBanPickStatus();
-  const flow = useBanPickFlow(status.isInProgress, status.complete, status.timerConfig);
-  const composition = useTeamComposition(champions);
+  const flow = useBanPickFlow(status.isInProgress, status.complete, settings.timer);
+  const composition = useTeamComposition(champions, settings);
 
   const selectRandom = withInProgress(() => {
     if (composition.availableChampions.length === 0) return;
@@ -85,7 +86,7 @@ export default function useBanPick(champions: Champion[]) {
 
     if (flow.time < 0) {
       if (flow.isBanPhase) {
-        // 밴 페이즈에서는 스킵
+        // 밴 페이즈에서는 노밴
         noBan();
       }
 

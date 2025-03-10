@@ -9,7 +9,5 @@ export default function BanPickHeader() {
   if (status.isCompleted) return <EndStateHeader />;
   if (status.isReady) return <ReadyStateHeader />;
 
-  return (
-    <InProgressHeader />
-  );
+  return <InProgressHeader />;
 }
