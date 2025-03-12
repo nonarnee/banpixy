@@ -14,6 +14,7 @@ export default function useBanPickFlow(
   const [currentPhase, setCurrentPhase] = useState<Phase>(PHASE_ORDER[0]);
   const [time, setTime] = useState(timerConfig.duration);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
+  const [isSwapEnabled, setIsSwapEnabled] = useState(false);
 
   // duration이 변경될 때마다 time 상태 업데이트
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function useBanPickFlow(
     setCurrentPhase(PHASE_ORDER[0]);
     setCurrentSelection(null);
     resetTimer();
+    setIsSwapEnabled(false);
   }, [resetTimer]);
 
   const selectChampion = withInProgress((champion: Champion) => {
@@ -47,6 +49,7 @@ export default function useBanPickFlow(
   const goNextPhase = useCallback(() => {
     if (currentPhase === PHASE_ORDER[PHASE_ORDER.length - 1]) {
       onComplete();
+      setIsSwapEnabled(false);
       return;
     }
 
@@ -75,6 +78,7 @@ export default function useBanPickFlow(
     isBanPhase,
     isBluePhase,
     isRedPhase,
+    isSwapEnabled,
     goNextPhase,
     resetTimer,
     resetFlow,
