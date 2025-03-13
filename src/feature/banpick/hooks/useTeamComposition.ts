@@ -110,6 +110,21 @@ export default function useTeamComposition(champions: Champion[], settings: BanP
     });
   };
 
+  const swapPicks = (team: Team, sourceIndex: number, targetIndex: number) => {
+    setComposition(prev => {
+      const newPicks = [...prev.picks[team]];
+      [newPicks[sourceIndex], newPicks[targetIndex]] = [newPicks[targetIndex], newPicks[sourceIndex]];
+
+      return {
+        ...prev,
+        picks: {
+          ...prev.picks,
+          [team]: newPicks,
+        },
+      };
+    });
+  };
+
   return {
     bluePicks: composition.picks.blue,
     redPicks: composition.picks.red,
@@ -121,6 +136,7 @@ export default function useTeamComposition(champions: Champion[], settings: BanP
     disabledChampions,
     updatePick,
     updateBan,
+    swapPicks,
     resetComposition,
   };
 }
