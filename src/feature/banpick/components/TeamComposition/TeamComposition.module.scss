@@ -71,6 +71,14 @@
   &.hasTeamName {
     height: calc((100vh - 15rem)/5);
   }
+
+  &.swappable {
+    cursor: move;
+
+    &:hover {
+      border-color: colors.$gold;
+    }
+  }
 }
 
 .championImage {

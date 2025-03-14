@@ -42,6 +42,8 @@ export default function TeamComposition({ team }: TeamCompositionProps) {
       slot={slot}
       previewImage={getPreviewImage()}
       hasTeamName={!!settings.teamName[team]}
+      isSwapEnabled={flow.isSwapEnabled}
+      onSwap={(sourceIndex, targetIndex) => composition.swapPicks(team, sourceIndex, targetIndex)}
     />,
     <BanSlots
       key={`${team}-ban`}
